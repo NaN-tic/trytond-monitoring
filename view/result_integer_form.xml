@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- The COPYRIGHT file at the top level of this repository contains the full
+     copyright notices and license terms. -->
+<form string="Monitoring Result Integer">
+    <label name="check"/>
+    <field name="check"/>
+    <label name="type"/>
+    <field name="type"/>
+    <label name="value"/>
+    <field name="value"/>
+    <label name="uom"/>
+    <field name="uom"/>
+</form>

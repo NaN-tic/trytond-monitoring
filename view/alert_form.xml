@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!-- The COPYRIGHT file at the top level of this repository contains the full
+     copyright notices and license terms. -->
+<form string="Monitoring Alert">
+    <label name="result_type"/>
+    <field name="result_type"/>
+    <field name="items" colspan="4"/>
+    <separator name="expression" colspan="4"/>
+    <field name="expression" colspan="4"/>
+</form>

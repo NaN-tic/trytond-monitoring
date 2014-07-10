@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- The COPYRIGHT file at the top level of this repository contains the full
+     copyright notices and license terms. -->
+<form string="Monitoring Result Type">
+    <label name="name"/>
+    <field name="name"/>
+    <label name="internal_name"/>
+    <field name="internal_name"/>
+    <label name="type"/>
+    <field name="type"/>
+    <label name="uom"/>
+    <field name="uom"/>
+</form>

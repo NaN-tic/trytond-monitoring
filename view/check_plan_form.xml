@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!-- The COPYRIGHT file at the top level of this repository contains the full
+     copyright notices and license terms. -->
+<form string="Monitoring Check Plan">
+    <label name="item"/>
+    <field name="item"/>
+    <newline/>
+    <label name="type"/>
+    <field name="type"/>
+    <label name="scheduler"/>
+    <field name="scheduler"/>
+    <label name="active"/>
+    <field name="active"/>
+    <field name="checks" colspan="4"/>
+    <button name="check" string="Check Now" colspan="2"/>
+</form>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- The COPYRIGHT file at the top level of this repository contains the full
+     copyright notices and license terms. -->
+<form string="Monitoring Scheduler">
+    <label name="name"/>
+    <field name="name"/>
+    <label name="normal_check_interval"/>
+    <field name="normal_check_interval" widget="float_time"/>
+    <label name="retries"/>
+    <field name="retries"/>
+    <label name="retry_check_interval"/>
+    <field name="retry_check_interval" widget="float_time"/>
+</form>
