@@ -19,92 +19,6 @@ class CheckType(ModelSQL, ModelView):
     name = fields.Char('Name', translate=True)
     internal_name = fields.Char('Internal Name', readonly=False)
 
-    def check(self, check_plan):
-        res = getattr(self, self.internal_name)(check_plan)
-        return res
-
-    def check_cpu_times_percent(self, check):
-        import psutil
-        usage = psutil.cpu_times_percent(interval=1)
-        res = []
-        for name in ('user', 'nice', 'system', 'idle', 'iowait', 'irq',
-                'softirq', 'steal', 'guest', 'nice'):
-            res.append({
-                    'result': 'cpu_percent_%s' % name,
-                    'float_value': getattr(usage, name),
-                    })
-        return res
-
-    def check_cpu_percent(self, check):
-        import psutil
-        usage = psutil.cpu_percent(interval=1)
-        return {
-            'result': 'cpu_percent',
-            'float_value': usage,
-            }
-
-    def check_disk(self, check):
-        import psutil
-        path = check.item.get_attribute('path')
-        usage = psutil.disk_usage(path)
-        res = []
-        for name in ('total', 'used', 'free', 'percent'):
-            res.append({
-                    'result': 'disk_usage_%s' % name,
-                    'float_value': getattr(usage, name),
-                    })
-        return res
-
-    def check_disk_io_counters(self, check):
-        import psutil
-        usage = psutil.disk_io_counters(perdisk=False)
-        res = []
-        for name in ('read_count', 'write_count', 'read_bytes', 'write_bytes',
-                'read_time', 'write_time'):
-            res.append({
-                    'result': 'disk_io_counter_%s' % name,
-                    'float_value': getattr(usage, name),
-                    })
-        return res
-
-    def check_swap(self, check):
-        import psutil
-        usage = psutil.swap_memory()
-        res = []
-        for name in ('total', 'used', 'free', 'percent', 'sin', 'sout'):
-            res.append({
-                    'result': 'swap_usage_%s' % name,
-                    'float_value': getattr(usage, name),
-                    })
-        return res
-
-    def check_physical_memory(self, check):
-        import psutil
-        usage = psutil.phymem_usage()
-        res = []
-        for name in ('total', 'available', 'percent', 'used', 'free', 'active',
-                'inactive', 'buffers', 'cached'):
-            res.append({
-                    'result': 'physical_memory_usage_%s' % name,
-                    'float_value': getattr(usage, name),
-                    })
-        return res
-
-    def check_net_io_counters(self, check):
-        import psutil
-        interface = check.item.get_attribute('interface')
-        pernic = bool(interface)
-        usage = psutil.net_io_counters(pernic=pernic)
-        if interface:
-            usage = usage[interface]
-        res = []
-        for name in ('bytes_sent', 'bytes_recv', 'packets_sent', 'packets_recv',
-                'errin', 'errout', 'dropin', 'dropout'):
-            res.append({
-                    'result': 'net_io_counter_%s' % name,
-                    'float_value': getattr(usage, name),
-                    })
-        return res
 
 
 class ResultType(ModelSQL, ModelView):
@@ -168,14 +82,14 @@ class CheckPlan(ModelSQL, ModelView):
             integer_to_create = []
             float_to_create = []
             char_to_create = []
-            res = plan.type.check(plan)
+            res = getattr(plan, plan.type.internal_name)()
             for result in res:
                 t = ResultType.search([
                         ('internal_name', '=', result['result']),
                         ], limit=1)
                 if not t:
-                    sys.stderr.write('Could not store result "%s".\n'
-                        % result['result'])
+                    sys.stderr.write('Could not store result type "%s". Result '
+                        'was: %s\n' % (result['result'], result))
                     continue
                 t = t[0]
                 if t.type == 'integer':
@@ -199,7 +113,6 @@ class CheckPlan(ModelSQL, ModelView):
                     sys.stderr.write('Unknown type "%s" for result "%s".\n'
                         % (t.type, result['result']))
                     continue
-
 
             to_create.append({
                     'timestamp': datetime.now(),
