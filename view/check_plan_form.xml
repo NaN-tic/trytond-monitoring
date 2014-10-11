@@ -2,8 +2,8 @@
 <!-- The COPYRIGHT file at the top level of this repository contains the full
      copyright notices and license terms. -->
 <form string="Monitoring Check Plan">
-    <label name="item"/>
-    <field name="item"/>
+    <label name="asset"/>
+    <field name="asset"/>
     <newline/>
     <label name="type"/>
     <field name="type"/>

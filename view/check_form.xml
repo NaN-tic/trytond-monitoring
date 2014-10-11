@@ -6,8 +6,8 @@
     <field name="timestamp"/>
     <label name="plan"/>
     <field name="plan"/>
-    <label name="item"/>
-    <field name="item"/>
+    <label name="asset"/>
+    <field name="asset"/>
     <label name="type"/>
     <field name="type"/>
     <group col="3" colspan="4" id="results" yfill="1" yexpand="1">
