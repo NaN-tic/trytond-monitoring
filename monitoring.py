@@ -42,7 +42,7 @@ class Scheduler(ModelSQL, ModelView):
     __name__ = 'monitoring.scheduler'
     # It might make sense to create a parent and inherit values from the
     # parent similar to Nagios behaviour.
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
     normal_check_interval = fields.Float('Normal Check Interval', required=True)
     retries = fields.Integer('Retries', required=True)
     retry_check_interval = fields.Float('Retry Check Interval', required=True)
