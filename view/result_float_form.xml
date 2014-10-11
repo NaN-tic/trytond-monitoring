@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!-- The COPYRIGHT file at the top level of this repository contains the full
      copyright notices and license terms. -->
-<form string="Monitoring Result Float">
+<form string="Monitoring Result Float" col="6">
     <label name="check"/>
-    <field name="check"/>
+    <field name="check" colspan="5"/>
     <label name="type"/>
     <field name="type"/>
     <label name="value"/>

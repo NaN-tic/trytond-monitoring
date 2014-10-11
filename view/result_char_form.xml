@@ -3,7 +3,7 @@
      copyright notices and license terms. -->
 <form string="Monitoring Result Char">
     <label name="check"/>
-    <field name="check"/>
+    <field name="check" colspan="3"/>
     <label name="type"/>
     <field name="type"/>
     <label name="value"/>
