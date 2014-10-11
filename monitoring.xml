@@ -421,5 +421,92 @@
         <menuitem action="act_monitoring_scheduler"
             id="menu_monitoring_scheduler" parent="menu_network_monitoring"
             sequence="1" name="Monitoring Scheduler"/>
+
+        <!-- Uoms -->
+        <record model="product.uom.category" id="uom_cat_data">
+            <field name="name">Data</field>
+        </record>
+        <record model="product.uom" id="uom_byte">
+            <field name="name">Byte</field>
+            <field name="symbol">B</field>
+            <field name="category" ref="uom_cat_data"/>
+            <field name="factor" eval="1"/>
+            <field name="rate" eval="1"/>
+        </record>
+        <record model="product.uom" id="uom_kilobyte">
+            <field name="name">Kilobyte</field>
+            <field name="symbol">KB</field>
+            <field name="category" ref="uom_cat_data"/>
+            <field name="factor" eval="1000"/>
+            <field name="rate" eval="0.001"/>
+        </record>
+        <record model="product.uom" id="uom_kibibyte">
+            <field name="name">Kibibyte</field>
+            <field name="symbol">KiB</field>
+            <field name="category" ref="uom_cat_data"/>
+            <field name="factor" eval="1024"/>
+            <field name="rate" eval="0.0009765625"/>
+        </record>
+        <record model="product.uom" id="uom_megabyte">
+            <field name="name">Megabite</field>
+            <field name="symbol">MB</field>
+            <field name="category" ref="uom_cat_data"/>
+            <field name="factor" eval="1000000"/>
+            <field name="rate" eval="0.000001"/>
+        </record>
+        <record model="product.uom" id="uom_mebibyte">
+            <field name="name">Mebibyte</field>
+            <field name="symbol">MiB</field>
+            <field name="category" ref="uom_cat_data"/>
+            <field name="factor" eval="1048576"/>
+            <field name="rate" eval="0.000000953674"/>
+        </record>
+        <record model="product.uom" id="uom_gigabyte">
+            <field name="name">Gigabyte</field>
+            <field name="symbol">GB</field>
+            <field name="category" ref="uom_cat_data"/>
+            <field name="factor" eval="1000000000"/>
+            <field name="rate" eval="0.000000001"/>
+        </record>
+        <record model="product.uom" id="uom_terabyte">
+            <field name="name">Terabyte</field>
+            <field name="symbol">TB</field>
+            <field name="category" ref="uom_cat_data"/>
+            <field name="factor" eval="1000000000000"/>
+            <field name="rate" eval="0.000000000001"/>
+        </record>
+
+        <record model="product.uom.category" id="uom_cat_ratio">
+            <field name="name">Ratio</field>
+        </record>
+        <record model="product.uom" id="uom_rate">
+            <field name="name">Rate</field>
+            <field name="symbol"> </field>
+            <field name="category" ref="uom_cat_data"/>
+            <field name="factor" eval="1"/>
+            <field name="rate" eval="1"/>
+        </record>
+        <record model="product.uom" id="uom_percent">
+            <field name="name">Percent</field>
+            <field name="symbol">%</field>
+            <field name="category" ref="uom_cat_data"/>
+            <field name="factor" eval="100"/>
+            <field name="rate" eval="0.01"/>
+        </record>
+        <record model="product.uom" id="uom_permille">
+            <field name="name">Per Mille</field>
+            <field name="symbol">‰</field>
+            <field name="category" ref="uom_cat_data"/>
+            <field name="factor" eval="1000"/>
+            <field name="rate" eval="0.001"/>
+        </record>
+
+        <record model="product.uom" id="uom_millisecond">
+            <field name="name">Millisecond</field>
+            <field name="symbol">ms</field>
+            <field name="category" ref="product.uom_cat_time"/>
+            <field name="factor" eval="round(1.0 / 3600000, 12)"/>
+            <field name="rate" eval="3600000"/>
+        </record>
     </data>
 </tryton>
