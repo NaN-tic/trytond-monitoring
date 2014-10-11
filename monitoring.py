@@ -75,8 +75,9 @@ class CheckPlan(ModelSQL, ModelView):
     @ModelView.button
     @ModelView.button
     def check(cls, plans):
-        Check = Pool().get('monitoring.check')
-        ResultType = Pool().get('monitoring.result.type')
+        pool = Pool()
+        Check = pool.get('monitoring.check')
+        ResultType = pool.get('monitoring.result.type')
         to_create = []
         for plan in plans:
             integer_to_create = []
@@ -125,6 +126,28 @@ class CheckPlan(ModelSQL, ModelView):
                     })
         if to_create:
             Check.create(to_create)
+
+    @classmethod
+    def check_all(cls):
+        pool = Pool()
+        Plan = pool.get('monitoring.check.plan')
+        Check = pool.get('monitoring.check')
+        plans = Plan.search([])
+        to_check = []
+        for plan in plans:
+            checks = Check.search([
+                    ('plan', '=', plan.id),
+                    ], order=[('timestamp', 'DESC')], limit=1)
+            if not checks:
+                to_check.append(plan)
+                continue
+            last_check = checks[0]
+
+            delta = datetime.now() - last_check.timestamp
+            if (delta.seconds / 3600.0) >= plan.scheduler.normal_check_interval:
+                to_check.append(plan)
+
+        Plan.check(Plan.browse([x.id for x in to_check]))
 
 
 class Check(ModelSQL, ModelView):

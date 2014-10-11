@@ -508,5 +508,34 @@
             <field name="factor" eval="round(1.0 / 3600000, 12)"/>
             <field name="rate" eval="3600000"/>
         </record>
+
+        <!-- monitoring.user -->
+        <record model="res.user" id="user_monitoring">
+            <field name="login">user_cron_internal_monitoring</field>
+            <field name="name">Cron Monitoring</field>
+            <field name="signature"></field>
+            <field name="active" eval="False"/>
+        </record>
+        <record model="res.user-res.group" id="user_monitoring_admin_group">
+            <field name="user" ref="user_monitoring"/>
+            <field name="group" ref="group_network_monitoring_admin"/>
+        </record>
+        <record model="res.user-res.group" id="user_asset_admin_group">
+            <field name="user" ref="user_monitoring"/>
+            <field name="group" ref="asset.group_asset_admin"/>
+        </record>
+        <record model="ir.cron" id="cron_scheduler">
+            <field name="name">Monitoring Check</field>
+            <field name="request_user" ref="res.user_admin"/>
+            <field name="user" ref="user_monitoring"/>
+            <field name="active" eval="True"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="number_calls">-1</field>
+            <field name="repeat_missed" eval="False"/>
+            <field name="model">monitoring.check.plan</field>
+            <field name="function">check_all</field>
+        </record>
+
     </data>
 </tryton>
