@@ -197,6 +197,15 @@ class Asset:
     alerts = fields.Many2Many('monitoring.alert-asset', 'asset', 'alert',
         'Alerts')
 
+    def get_attribute(self, name):
+        """
+        Returns the value of the given attribute.
+
+        Other modules may want to implement their own way of searching for a
+        given attribute, for example by considering related items.
+        """
+        return self.attributes.get(name) if self.attributes else None
+
 # Zabbix structure:
 # A template contains:
 #
