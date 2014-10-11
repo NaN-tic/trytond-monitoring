@@ -9,7 +9,8 @@ from trytond.pyson import Eval
 
 
 __all__ = ['CheckType', 'ResultType', 'Scheduler', 'CheckPlan', 'Check',
-    'ResultInteger', 'ResultFloat', 'ResultChar', 'Alert', 'AlertItem', 'Item']
+    'ResultInteger', 'ResultFloat', 'ResultChar', 'Alert', 'AlertAsset',
+    'Asset']
 __metaclass__ = PoolMeta
 
 
@@ -18,7 +19,6 @@ class CheckType(ModelSQL, ModelView):
     __name__ = 'monitoring.check.type'
     name = fields.Char('Name', translate=True)
     internal_name = fields.Char('Internal Name', readonly=False)
-
 
 
 class ResultType(ModelSQL, ModelView):
@@ -53,7 +53,7 @@ class Scheduler(ModelSQL, ModelView):
 class CheckPlan(ModelSQL, ModelView):
     'Monitoring Check Plan'
     __name__ = 'monitoring.check.plan'
-    item = fields.Many2One('network.item', 'Item', required=True)
+    asset = fields.Many2One('asset', 'Asset', required=True)
     type = fields.Many2One('monitoring.check.type', 'Type', required=True)
     scheduler = fields.Many2One('monitoring.scheduler', 'Scheduler',
         required=True)
@@ -118,7 +118,7 @@ class CheckPlan(ModelSQL, ModelView):
                     'timestamp': datetime.now(),
                     'plan': plan.id,
                     'type': plan.type.id,
-                    'item': plan.item.id,
+                    'asset': plan.asset.id,
                     'integer_results': [('create', integer_to_create)],
                     'float_results': [('create', float_to_create)],
                     'char_results': [('create', char_to_create)],
@@ -133,7 +133,7 @@ class Check(ModelSQL, ModelView):
     timestamp = fields.DateTime('Timestamp', required=True)
     plan = fields.Many2One('monitoring.check.plan', 'Plan', required=True)
     type = fields.Many2One('monitoring.check.type', 'Type', required=True)
-    item = fields.Many2One('network.item', 'Item', required=True)
+    asset = fields.Many2One('asset', 'Asset', required=True)
     integer_results = fields.One2Many('monitoring.result.integer', 'check',
         'Integer Results')
     float_results = fields.One2Many('monitoring.result.float', 'check',
@@ -176,25 +176,25 @@ class ResultChar(ModelSQL, ModelView):
 class Alert(ModelSQL, ModelView):
     'Monitoring Alert'
     __name__ = 'monitoring.alert'
-    items = fields.Many2Many('monitoring.alert-network.item', 'alert', 'item',
-        'Items')
+    assets = fields.Many2Many('monitoring.alert-asset', 'alert', 'asset',
+        'Assets')
     result_type = fields.Many2One('monitoring.result.type', 'Result Type')
     expression = fields.Text('Expression')
     # Take into account UOM conversion
 
 
-class AlertItem(ModelSQL):
-    'Monitoring Alert - Network Item'
-    __name__ = 'monitoring.alert-network.item'
-    item = fields.Many2One('network.item', 'Item', required=True)
+class AlertAsset(ModelSQL):
+    'Monitoring Alert - Asset'
+    __name__ = 'monitoring.alert-asset'
+    asset = fields.Many2One('asset', 'Asset', required=True)
     alert = fields.Many2One('monitoring.alert', 'Alert', required=True)
 
 
-class Item:
-    __name__ = 'network.item'
-    plans = fields.One2Many('monitoring.check.plan', 'item', 'Check Plans')
-    checks = fields.One2Many('monitoring.check', 'item', 'Checks')
-    alerts = fields.Many2Many('monitoring.alert-network.item', 'item', 'alert',
+class Asset:
+    __name__ = 'asset'
+    plans = fields.One2Many('monitoring.check.plan', 'asset', 'Check Plans')
+    checks = fields.One2Many('monitoring.check', 'asset', 'Checks')
+    alerts = fields.Many2Many('monitoring.alert-asset', 'asset', 'alert',
         'Alerts')
 
 # Zabbix structure:

@@ -14,6 +14,6 @@ def register():
         ResultFloat,
         ResultChar,
         Alert,
-        AlertItem,
-        Item,
+        AlertAsset,
+        Asset,
         module='network_monitoring', type_='model')
