@@ -375,6 +375,16 @@
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+
+        <record model="ir.model.access" id="access_asset_party_notification">
+            <field name="model" search="[('model', '=', 'asset-party.party-notification')]"/>
+            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+
         <record model="ir.ui.view" id="asset_view_form">
             <field name="model">asset</field>
             <field name="type">form</field>
@@ -382,6 +392,12 @@
             <field name="name">asset_form</field>
         </record>
 
+        <record model="ir.ui.view" id="party_view_form">
+            <field name="model">party.party</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="party.party_view_form"/>
+            <field name="name">party_form</field>
+        </record>
         <!-- Menus -->
         <menuitem id="menu_network_monitoring" name="Monitoring" sequence="100"
             parent="asset.menu_asset"/>

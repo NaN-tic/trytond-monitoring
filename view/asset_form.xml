@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- The COPYRIGHT file at the top level of this repository contains the full
+     copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/notebook/page[@id='relations']" position="after">
+        <page string="Monitoring" id="monitoring">
+            <field name="plans" colspan="4"/>
+            <field name="alerts" colspan="4"/>
+            <field name="checks" colspan="4"/>
+            <field name="notification_parties" colspan="4"/>
+        </page>
+    </xpath>
+</data>

@@ -10,7 +10,7 @@ from trytond.pyson import Eval
 
 __all__ = ['CheckType', 'ResultType', 'Scheduler', 'CheckPlan', 'Check',
     'ResultInteger', 'ResultFloat', 'ResultChar', 'Alert', 'AlertAsset',
-    'Asset']
+    'AssetPartyNotification', 'Asset', 'Party']
 __metaclass__ = PoolMeta
 
 
@@ -213,12 +213,21 @@ class AlertAsset(ModelSQL):
     alert = fields.Many2One('monitoring.alert', 'Alert', required=True)
 
 
+class AssetPartyNotification(ModelSQL):
+    'Asset - Party Notification'
+    __name__ = 'asset-party.party-notification'
+    asset = fields.Many2One('asset', 'Asset', required=True)
+    party = fields.Many2One('party.party', 'Party', required=True)
+
+
 class Asset:
     __name__ = 'asset'
     plans = fields.One2Many('monitoring.check.plan', 'asset', 'Check Plans')
     checks = fields.One2Many('monitoring.check', 'asset', 'Checks')
     alerts = fields.Many2Many('monitoring.alert-asset', 'asset', 'alert',
         'Alerts')
+    notification_parties = fields.Many2Many('asset-party.party-notification',
+        'asset', 'party', 'Notification Parties')
 
     def get_attribute(self, name):
         """
@@ -228,6 +237,13 @@ class Asset:
         given attribute, for example by considering related items.
         """
         return self.attributes.get(name) if self.attributes else None
+
+
+class Party:
+    __name__ = 'party.party'
+    notification_assets = fields.Many2Many('asset-party.party-notification',
+        'party', 'asset', 'Notification Assets')
+
 
 # Zabbix structure:
 # A template contains:

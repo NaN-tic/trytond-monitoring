@@ -15,5 +15,7 @@ def register():
         ResultChar,
         Alert,
         AlertAsset,
+        AssetPartyNotification,
         Asset,
+        Party,
         module='network_monitoring', type_='model')
