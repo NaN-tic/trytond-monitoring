@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <!-- The COPYRIGHT file at the top level of this repository contains the full
      copyright notices and license terms. -->
-<tree string="Monitoring State">
+<tree string="Monitoring State" colors="Eval('color')">
     <field name="check"/>
     <field name="indicator"/>
     <field name="value"/>
+    <field name="color" tree_invisible="1"/>
 </tree>

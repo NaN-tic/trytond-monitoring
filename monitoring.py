@@ -235,6 +235,7 @@ class StateIndicatorCheckPlan(ModelSQL):
     indicator = fields.Many2One('monitoring.state.indicator', 'Indicator',
         required=True)
     plan = fields.Many2One('monitoring.check.plan', 'Plan', required=True)
+    state = fields.Many2One('monitoring.state', 'State')
 
 
 class Check(ModelSQL, ModelView):
@@ -267,6 +268,7 @@ class State(ModelSQL, ModelView):
     asset = fields.Function(fields.Many2One('asset', 'Asset'), 'get_asset',
         searcher='search_asset')
     value = fields.Many2One('monitoring.state.type', 'Value', required=True)
+    color = fields.Function(fields.Char('Color'), 'get_color')
 
     def get_asset(self, name):
         return self.check.asset.id
@@ -274,6 +276,9 @@ class State(ModelSQL, ModelView):
     @classmethod
     def search_asset(cls, name, clause):
         return [('check.asset',) + tuple(clause[1:])]
+
+    def get_color(self, name):
+        return self.value.color if self.value else 'black'
 
 
 class ResultInteger(ModelSQL, ModelView):
