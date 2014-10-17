@@ -149,6 +149,30 @@
         </record>
 
         <!-- monitoring.indicator-monitoring.check.plan -->
+        <record model="ir.ui.view" id="monitoring_state_indicator_check_plan_view_form">
+            <field name="model">monitoring.state.indicator-monitoring.check.plan</field>
+            <field name="type">form</field>
+            <field name="name">state_indicator_check_plan_form</field>
+        </record>
+        <record model="ir.ui.view" id="monitoring_state_indicator_check_plan_view_list">
+            <field name="model">monitoring.state.indicator-monitoring.check.plan</field>
+            <field name="type">tree</field>
+            <field name="name">state_indicator_check_plan_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_monitoring_state_indicator_check_plan">
+            <field name="name">Monitoring Curent States</field>
+            <field name="res_model">monitoring.state.indicator-monitoring.check.plan</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_monitoring_state_indicator_check_plan_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="monitoring_state_indicator_check_plan_view_list"/>
+            <field name="act_window" ref="act_monitoring_state_indicator_check_plan"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_monitoring_state_indicator_check_plan_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="monitoring_state_indicator_check_plan_view_form"/>
+            <field name="act_window" ref="act_monitoring_state_indicator_check_plan"/>
+        </record>
         <record model="ir.model.access" id="access_monitoring_state_indicator_check_plan">
             <field name="model" search="[('model', '=', 'monitoring.state.indicator-monitoring.check.plan')]"/>
             <field name="perm_read" eval="True"/>
@@ -607,6 +631,9 @@
             <field name="group" ref="group_monitoring"/>
           </record>
 
+        <menuitem action="act_monitoring_state_indicator_check_plan"
+            id="menu_state_indicator_check_plan" parent="menu_monitoring"
+            sequence="1" name="Current States"/>
         <menuitem action="act_monitoring_state_type" id="menu_monitoring_state_type"
             parent="menu_monitoring" sequence="1" name="State Types"/>
         <menuitem action="act_monitoring_state_indicator" id="menu_monitoring_state_indicator"

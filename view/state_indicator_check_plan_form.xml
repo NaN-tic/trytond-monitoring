@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- The COPYRIGHT file at the top level of this repository contains the full
+     copyright notices and license terms. -->
+<form string="Current State" colors="Eval('color')">
+    <label name="asset"/>
+    <field name="asset"/>
+    <label name="plan"/>
+    <field name="plan"/>
+    <label name="indicator"/>
+    <field name="indicator"/>
+    <label name="last_check"/>
+    <field name="last_check"/>
+    <label name="last_state_type"/>
+    <field name="last_state_type"/>
+</form>

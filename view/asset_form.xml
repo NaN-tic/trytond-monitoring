@@ -6,6 +6,7 @@
         <page string="Monitoring" id="monitoring">
             <field name="plans" colspan="4"/>
             <field name="notification_parties" colspan="4"/>
+            <field name="states" colspan="4"/>
         </page>
     </xpath>
 </data>

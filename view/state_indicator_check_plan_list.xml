@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!-- The COPYRIGHT file at the top level of this repository contains the full
+     copyright notices and license terms. -->
+<tree string="Current State" colors="Eval('color')">
+    <field name="asset"/>
+    <field name="indicator"/>
+    <field name="last_check"/>
+    <field name="last_state_type"/>
+    <field name="color" tree_invisible="1"/>
+</tree>

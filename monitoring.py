@@ -229,13 +229,53 @@ class CheckPlan(ModelSQL, ModelView):
         Plan.check(Plan.browse([x.id for x in to_check]))
 
 
-class StateIndicatorCheckPlan(ModelSQL):
+class StateIndicatorCheckPlan(ModelSQL, ModelView):
     'Monitoring State Indicator - Monitoring Check Plan'
     __name__ = 'monitoring.state.indicator-monitoring.check.plan'
     indicator = fields.Many2One('monitoring.state.indicator', 'Indicator',
         required=True)
     plan = fields.Many2One('monitoring.check.plan', 'Plan', required=True)
-    state = fields.Many2One('monitoring.state', 'State')
+    last_check = fields.Function(fields.Many2One('monitoring.check',
+            'Last Check'), 'get_last_check')
+    last_state = fields.Function(fields.Many2One('monitoring.state', 'State'),
+        'get_last_state')
+    last_state_type = fields.Function(fields.Many2One('monitoring.state.type',
+            'State Type'), 'get_last_state_type')
+    asset = fields.Function(fields.Many2One('asset', 'Asset'), 'get_asset',
+        searcher='search_asset')
+    color = fields.Function(fields.Char('Color'), 'get_color')
+
+    def get_last_check(self, name):
+        if not self.plan.checks:
+            return None
+        return self.plan.checks[0].id
+
+    def get_last_state(self, name):
+        check = self.last_check
+        if not check:
+            return
+        for state in check.states:
+            if state.indicator == self.indicator:
+                return state.id
+
+    def get_last_state_type(self, name):
+        state = self.last_state
+        if not state:
+            return
+        return state.value.id
+
+    def get_color(self, name):
+        state = self.last_state_type
+        if not state:
+            return
+        return state.color
+
+    def get_asset(self, name):
+        return self.plan.asset.id
+
+    @classmethod
+    def search_asset(cls, name, clause):
+        return [('plan.asset',) + tuple(clause[1:])]
 
 
 class Check(ModelSQL, ModelView):
@@ -263,6 +303,7 @@ class Check(ModelSQL, ModelView):
 class State(ModelSQL, ModelView):
     'Monitoring State'
     __name__ = 'monitoring.state'
+    _rec_name = 'check'
     check = fields.Many2One('monitoring.check', 'Check', required=True)
     indicator = fields.Many2One('monitoring.state.indicator', 'Indicator',
         required=True)
@@ -319,6 +360,9 @@ class Asset:
     __name__ = 'asset'
     plans = fields.One2Many('monitoring.check.plan', 'asset', 'Check Plans')
     checks = fields.One2Many('monitoring.check', 'asset', 'Checks')
+    states = fields.Function(fields.One2Many(
+            'monitoring.state.indicator-monitoring.check.plan', None, 'States'),
+        'get_states')
     notification_parties = fields.Many2Many('asset-party.party-notification',
         'asset', 'party', 'Notification Parties')
 
@@ -330,6 +374,12 @@ class Asset:
         given attribute, for example by considering related items.
         """
         return self.attributes.get(name) if self.attributes else None
+
+    def get_states(self, name):
+        IndicatorPlan = Pool().get(
+            'monitoring.state.indicator-monitoring.check.plan')
+        records = IndicatorPlan.search([('asset', '=', self.id)])
+        return [x.id for x in records]
 
 
 class StateTypeParty(ModelSQL):
