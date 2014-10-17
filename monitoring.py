@@ -183,8 +183,8 @@ class CheckPlan(ModelSQL, ModelView):
                             'indicator': indicator.id,
                             'value': state_type.id,
                             })
-                    # Should be improved to take into account previous state
-                    # and notify if state is ok again
+                    # TODO: Should be improved to take into account previous
+                    # state and notify if state is ok again
 
                     # Maybe standard triggers will be enough by now
                     #for party in asset.notification_parties:
@@ -263,7 +263,16 @@ class State(ModelSQL, ModelView):
     check = fields.Many2One('monitoring.check', 'Check', required=True)
     indicator = fields.Many2One('monitoring.state.indicator', 'Indicator',
         required=True)
+    asset = fields.Function(fields.Many2One('asset', 'Asset'), 'get_asset',
+        searcher='search_asset')
     value = fields.Many2One('monitoring.state.type', 'Value', required=True)
+
+    def get_asset(self, name):
+        return self.check.asset.id
+
+    @classmethod
+    def search_asset(cls, name, clause):
+        return [('check.asset',) + tuple(clause[1:])]
 
 
 class ResultInteger(ModelSQL, ModelView):
