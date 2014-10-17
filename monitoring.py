@@ -1,16 +1,19 @@
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
 import sys
+import ast
 from datetime import datetime
 
+from trytond.tools import safe_eval
 from trytond.model import ModelSQL, ModelView, fields
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 
 
-__all__ = ['CheckType', 'ResultType', 'Scheduler', 'CheckPlan', 'Check',
-    'ResultInteger', 'ResultFloat', 'ResultChar', 'Alert', 'AlertAsset',
-    'AssetPartyNotification', 'Asset', 'Party']
+__all__ = ['CheckType', 'ResultType', 'StateType', 'StateIndicator',
+    'StateIndicatorLine', 'Scheduler', 'CheckPlan', 'StateIndicatorCheckPlan',
+    'Check', 'State', 'ResultInteger', 'ResultFloat', 'ResultChar',
+    'AssetPartyNotification', 'Asset', 'StateTypeParty', 'Party']
 __metaclass__ = PoolMeta
 
 
@@ -37,6 +40,46 @@ class ResultType(ModelSQL, ModelView):
             })
 
 
+class StateType(ModelSQL, ModelView):
+    'Monitoring State Value'
+    __name__ = 'monitoring.state.type'
+    name = fields.Char('Name', translate=True, required=True)
+
+
+class StateIndicator(ModelSQL, ModelView):
+    'Monitoring State Indicator'
+    __name__ = 'monitoring.state.indicator'
+    name = fields.Char('Name', translate=True, required=True)
+    result_type = fields.Many2One('monitoring.result.type', 'Result Type',
+        required=True)
+    default_state_type = fields.Many2One('monitoring.state.type',
+        'Default Type', required=True)
+    # At least one line should be required
+    lines = fields.One2Many('monitoring.state.indicator.line', 'indicator',
+        'Lines', required=True)
+
+
+class StateIndicatorLine(ModelSQL, ModelView):
+    'Monitoring State Indicator Line'
+    __name__ = 'monitoring.state.indicator.line'
+    indicator = fields.Many2One('monitoring.state.indicator', 'Indicator',
+        required=True)
+    sequence = fields.Integer('Sequence')
+    expression = fields.Text('Expression', required=True)
+    state_type = fields.Many2One('monitoring.state.type', 'Type', required=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(StateIndicatorLine, cls).__setup__()
+        cls._order.insert(0, ('indicator', 'ASC'))
+        cls._order.insert(0, ('sequence', 'ASC'))
+
+    @staticmethod
+    def order_sequence(tables):
+        table, _ = tables[None]
+        return [table.sequence == None, table.sequence]
+
+
 class Scheduler(ModelSQL, ModelView):
     'Monitoring Scheduler'
     __name__ = 'monitoring.scheduler'
@@ -48,7 +91,7 @@ class Scheduler(ModelSQL, ModelView):
     retry_check_interval = fields.Float('Retry Check Interval', required=True)
 
 
-# We should probably create a scheduler queue
+# TODO: We should probably create a scheduler queue
 
 class CheckPlan(ModelSQL, ModelView):
     'Monitoring Check Plan'
@@ -59,6 +102,9 @@ class CheckPlan(ModelSQL, ModelView):
         required=True)
     active = fields.Boolean('Active')
     checks = fields.One2Many('monitoring.check', 'plan', 'Checks')
+    indicators = fields.Many2Many(
+        'monitoring.state.indicator-monitoring.check.plan', 'plan', 'indicator',
+        'State Indicators')
 
     @classmethod
     def __setup__(cls):
@@ -93,19 +139,23 @@ class CheckPlan(ModelSQL, ModelView):
                         'was: %s\n' % (result['result'], result))
                     continue
                 t = t[0]
+                value = None
                 if t.type == 'integer':
+                    value = result['integer_value']
                     integer_to_create.append({
                             'type': t.id,
                             'value': result['integer_value'],
                             'uom': result.get('uom', t.uom.id),
                             })
                 elif t.type == 'float':
+                    value = result['float_value']
                     float_to_create.append({
                             'type': t.id,
                             'value': result['float_value'],
                             'uom': result.get('uom', t.uom.id),
                             })
                 elif t.type == 'char':
+                    value = result['char_value']
                     char_to_create.append({
                             'type': t.id,
                             'value': result['char_value'],
@@ -115,6 +165,33 @@ class CheckPlan(ModelSQL, ModelView):
                         % (t.type, result['result']))
                     continue
 
+                states_to_create = []
+                for indicator in plan.indicators:
+                    if indicator.result_type != t:
+                        continue
+                    state_type = None
+                    for line in indicator.lines:
+                        #ast.literal_eval(indicator.expression)
+                        if safe_eval(line.expression, {
+                                    'value': value,
+                                    }):
+                            state_type = line.state_type
+                            break
+                    if not state_type:
+                        state_type = indicator.default_state_type
+                    states_to_create.append({
+                            'indicator': indicator.id,
+                            'value': state_type.id,
+                            })
+                    # Should be improved to take into account previous state
+                    # and notify if state is ok again
+
+                    # Maybe standard triggers will be enough by now
+                    #for party in asset.notification_parties:
+                        #if state_type in party.notification_types:
+                            #Template.render_and_send(configuration.email_template.id, [notification])
+
+
             to_create.append({
                     'timestamp': datetime.now(),
                     'plan': plan.id,
@@ -123,6 +200,7 @@ class CheckPlan(ModelSQL, ModelView):
                     'integer_results': [('create', integer_to_create)],
                     'float_results': [('create', float_to_create)],
                     'char_results': [('create', char_to_create)],
+                    'states': [('create', states_to_create)],
                     })
         if to_create:
             Check.create(to_create)
@@ -150,6 +228,14 @@ class CheckPlan(ModelSQL, ModelView):
         Plan.check(Plan.browse([x.id for x in to_check]))
 
 
+class StateIndicatorCheckPlan(ModelSQL):
+    'Monitoring State Indicator - Monitoring Check Plan'
+    __name__ = 'monitoring.state.indicator-monitoring.check.plan'
+    indicator = fields.Many2One('monitoring.state.indicator', 'Indicator',
+        required=True)
+    plan = fields.Many2One('monitoring.check.plan', 'Plan', required=True)
+
+
 class Check(ModelSQL, ModelView):
     'Monitoring Check'
     __name__ = 'monitoring.check'
@@ -163,11 +249,21 @@ class Check(ModelSQL, ModelView):
         'Float Results')
     char_results = fields.One2Many('monitoring.result.char', 'check',
         'Char Results')
+    states = fields.One2Many('monitoring.state', 'check', 'States')
 
     @classmethod
     def __setup__(cls):
         super(Check, cls).__setup__()
         cls._order.insert(0, ('timestamp', 'DESC'))
+
+
+class State(ModelSQL, ModelView):
+    'Monitoring State'
+    __name__ = 'monitoring.state'
+    check = fields.Many2One('monitoring.check', 'Check', required=True)
+    indicator = fields.Many2One('monitoring.state.indicator', 'Indicator',
+        required=True)
+    value = fields.Many2One('monitoring.state.type', 'Value', required=True)
 
 
 class ResultInteger(ModelSQL, ModelView):
@@ -196,23 +292,6 @@ class ResultChar(ModelSQL, ModelView):
     value = fields.Char('Value')
 
 
-class Alert(ModelSQL, ModelView):
-    'Monitoring Alert'
-    __name__ = 'monitoring.alert'
-    assets = fields.Many2Many('monitoring.alert-asset', 'alert', 'asset',
-        'Assets')
-    result_type = fields.Many2One('monitoring.result.type', 'Result Type')
-    expression = fields.Text('Expression')
-    # Take into account UOM conversion
-
-
-class AlertAsset(ModelSQL):
-    'Monitoring Alert - Asset'
-    __name__ = 'monitoring.alert-asset'
-    asset = fields.Many2One('asset', 'Asset', required=True)
-    alert = fields.Many2One('monitoring.alert', 'Alert', required=True)
-
-
 class AssetPartyNotification(ModelSQL):
     'Asset - Party Notification'
     __name__ = 'asset-party.party-notification'
@@ -224,8 +303,6 @@ class Asset:
     __name__ = 'asset'
     plans = fields.One2Many('monitoring.check.plan', 'asset', 'Check Plans')
     checks = fields.One2Many('monitoring.check', 'asset', 'Checks')
-    alerts = fields.Many2Many('monitoring.alert-asset', 'asset', 'alert',
-        'Alerts')
     notification_parties = fields.Many2Many('asset-party.party-notification',
         'asset', 'party', 'Notification Parties')
 
@@ -239,10 +316,21 @@ class Asset:
         return self.attributes.get(name) if self.attributes else None
 
 
+class StateTypeParty(ModelSQL):
+    'Monitoring State - Party'
+    __name__ = 'monitoring.state.type-party.party'
+    type = fields.Many2One('monitoring.state.type', 'Type', required=True)
+    party = fields.Many2One('party.party', 'Party', required=True)
+
+
 class Party:
     __name__ = 'party.party'
     notification_assets = fields.Many2Many('asset-party.party-notification',
         'party', 'asset', 'Notification Assets')
+    notification_types = fields.Many2Many('monitoring.state.type-party.party',
+        'party', 'type', 'Types')
+
+    # TODO: Add calculated One2Many that shows all indicators in its current state.
 
 
 # Zabbix structure:

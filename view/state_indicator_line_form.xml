@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- The COPYRIGHT file at the top level of this repository contains the full
+     copyright notices and license terms. -->
+<form string="Monitoring State Indicator Line">
+    <label name="indicator"/>
+    <field name="indicator" colspan="3"/>
+    <label name="state_type"/>
+    <field name="state_type"/>
+    <label name="sequence"/>
+    <field name="sequence"/>
+    <label name="expression"/>
+    <field name="expression" colspan="3"/>
+</form>

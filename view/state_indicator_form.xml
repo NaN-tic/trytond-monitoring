@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
 <!-- The COPYRIGHT file at the top level of this repository contains the full
      copyright notices and license terms. -->
-<form string="Monitoring Alert">
+<form string="Monitoring State Indicator">
+    <label name="name"/>
+    <field name="name"/>
     <label name="result_type"/>
     <field name="result_type"/>
-    <field name="assets" colspan="4"/>
-    <separator name="expression" colspan="4"/>
-    <field name="expression" colspan="4"/>
+    <label name="default_state_type"/>
+    <field name="default_state_type"/>
+    <field name="lines" colspan="4"/>
 </form>

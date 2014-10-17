@@ -15,4 +15,5 @@
         <field name="float_results"/>
         <field name="integer_results"/>
     </group>
+    <field name="states" colspan="4"/>
 </form>

@@ -24,45 +24,205 @@
             <field name="user" ref="res.user_trigger"/>
             <field name="group" ref="group_network_monitoring"/>
         </record>
-        <record model="ir.ui.view" id="monitoring_alert_view_form">
-            <field name="model">monitoring.alert</field>
+
+        <!-- monitoring.state.type -->
+        <record model="ir.ui.view" id="monitoring_state_type_view_form">
+            <field name="model">monitoring.state.type</field>
             <field name="type">form</field>
-            <field name="name">alert_form</field>
+            <field name="name">state_type_form</field>
         </record>
-        <record model="ir.ui.view" id="monitoring_alert_view_list">
-            <field name="model">monitoring.alert</field>
+        <record model="ir.ui.view" id="monitoring_state_type_view_list">
+            <field name="model">monitoring.state.type</field>
             <field name="type">tree</field>
-            <field name="name">alert_list</field>
+            <field name="name">state_type_list</field>
         </record>
-        <record model="ir.action.act_window" id="act_monitoring_alert">
-            <field name="name">Monitoring Alert</field>
-            <field name="res_model">monitoring.alert</field>
+        <record model="ir.action.act_window" id="act_monitoring_state_type">
+            <field name="name">Monitoring State Type</field>
+            <field name="res_model">monitoring.state.type</field>
         </record>
-        <record model="ir.action.act_window.view" id="act_monitoring_alert_view1">
+        <record model="ir.action.act_window.view" id="act_monitoring_state_type_view1">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="monitoring_alert_view_list"/>
-            <field name="act_window" ref="act_monitoring_alert"/>
+            <field name="view" ref="monitoring_state_type_view_list"/>
+            <field name="act_window" ref="act_monitoring_state_type"/>
         </record>
-        <record model="ir.action.act_window.view" id="act_monitoring_alert_view2">
+        <record model="ir.action.act_window.view" id="act_monitoring_state_type_view2">
             <field name="sequence" eval="20"/>
-            <field name="view" ref="monitoring_alert_view_form"/>
-            <field name="act_window" ref="act_monitoring_alert"/>
+            <field name="view" ref="monitoring_state_type_view_form"/>
+            <field name="act_window" ref="act_monitoring_state_type"/>
         </record>
-        <record model="ir.model.access" id="access_monitoring_alert">
-            <field name="model" search="[('model', '=', 'monitoring.alert')]"/>
+        <record model="ir.model.access" id="access_monitoring_state_type">
+            <field name="model" search="[('model', '=', 'monitoring.state.type')]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="False"/>
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
-        <record model="ir.model.access" id="access_monitoring_alert_admin">
-            <field name="model" search="[('model', '=', 'monitoring.alert')]"/>
+        <record model="ir.model.access" id="access_monitoring_state_type_admin">
+            <field name="model" search="[('model', '=', 'monitoring.state.type')]"/>
             <field name="group" ref="group_network_monitoring_admin"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+
+        <!-- monitoring.state.indicator -->
+        <record model="ir.ui.view" id="monitoring_state_indicator_view_form">
+            <field name="model">monitoring.state.indicator</field>
+            <field name="type">form</field>
+            <field name="name">state_indicator_form</field>
+        </record>
+        <record model="ir.ui.view" id="monitoring_state_indicator_view_list">
+            <field name="model">monitoring.state.indicator</field>
+            <field name="type">tree</field>
+            <field name="name">state_indicator_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_monitoring_state_indicator">
+            <field name="name">Monitoring State Indicator</field>
+            <field name="res_model">monitoring.state.indicator</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_monitoring_state_indicator_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="monitoring_state_indicator_view_list"/>
+            <field name="act_window" ref="act_monitoring_state_indicator"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_monitoring_state_indicator_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="monitoring_state_indicator_view_form"/>
+            <field name="act_window" ref="act_monitoring_state_indicator"/>
+        </record>
+        <record model="ir.model.access" id="access_monitoring_state_indicator">
+            <field name="model" search="[('model', '=', 'monitoring.state.indicator')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_monitoring_state_indicator_admin">
+            <field name="model" search="[('model', '=', 'monitoring.state.indicator')]"/>
+            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+
+        <!-- monitoring.state.indicator.line -->
+        <record model="ir.ui.view" id="monitoring_state_indicator_line_view_form">
+            <field name="model">monitoring.state.indicator.line</field>
+            <field name="type">form</field>
+            <field name="name">state_indicator_line_form</field>
+        </record>
+        <record model="ir.ui.view" id="monitoring_state_indicator_line_view_list">
+            <field name="model">monitoring.state.indicator.line</field>
+            <field name="type">tree</field>
+            <field name="name">state_indicator_line_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_monitoring_state_indicator_line">
+            <field name="name">Monitoring Alert</field>
+            <field name="res_model">monitoring.state.indicator.line</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_monitoring_state_indicator_line_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="monitoring_state_indicator_line_view_list"/>
+            <field name="act_window" ref="act_monitoring_state_indicator_line"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_monitoring_state_indicator_line_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="monitoring_state_indicator_line_view_form"/>
+            <field name="act_window" ref="act_monitoring_state_indicator_line"/>
+        </record>
+        <record model="ir.model.access" id="access_monitoring_state_indicator_line">
+            <field name="model" search="[('model', '=', 'monitoring.state.indicator.line')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_monitoring_state_indicator_line_admin">
+            <field name="model" search="[('model', '=', 'monitoring.state.indicator.line')]"/>
+            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+
+        <!-- monitoring.indicator-monitoring.check.plan -->
+        <record model="ir.model.access" id="access_monitoring_state_indicator_check_plan">
+            <field name="model" search="[('model', '=', 'monitoring.state.indicator-monitoring.check.plan')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_monitoring_state_indicator_check_plan_admin">
+            <field name="model" search="[('model', '=', 'monitoring.state.indicator-monitoring.check.plan')]"/>
+            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+
+        <!-- monitoring.state -->
+        <record model="ir.ui.view" id="monitoring_state_view_form">
+            <field name="model">monitoring.state</field>
+            <field name="type">form</field>
+            <field name="name">state_form</field>
+        </record>
+        <record model="ir.ui.view" id="monitoring_state_view_list">
+            <field name="model">monitoring.state</field>
+            <field name="type">tree</field>
+            <field name="name">state_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_monitoring_state">
+            <field name="name">Monitoring State</field>
+            <field name="res_model">monitoring.state</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_monitoring_state_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="monitoring_state_view_list"/>
+            <field name="act_window" ref="act_monitoring_state"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_monitoring_state_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="monitoring_state_view_form"/>
+            <field name="act_window" ref="act_monitoring_state"/>
+        </record>
+        <record model="ir.model.access" id="access_monitoring_state">
+            <field name="model" search="[('model', '=', 'monitoring.state')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_monitoring_state_admin">
+            <field name="model" search="[('model', '=', 'monitoring.state')]"/>
+            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+
+        <!-- monitoring.state.type-party.party -->
+        <record model="ir.model.access" id="access_monitoring_state_type_party_party">
+            <field name="model" search="[('model', '=', 'monitoring.state.type-party.party')]"/>
+            <field name="perm_read" eval="True"/>        monitoring.state.type-party.party
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_monitoring_state_type_party_party_admin">
+            <field name="model" search="[('model', '=', 'monitoring.state.type-party.party')]"/>
+            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+
         <record model="ir.ui.view" id="monitoring_check_view_form">
             <field name="model">monitoring.check</field>
             <field name="type">form</field>
@@ -398,6 +558,30 @@
             <field name="inherit" ref="party.party_view_form"/>
             <field name="name">party_form</field>
         </record>
+
+        <!-- Relates -->
+        <record model="ir.action.act_window" id="act_plan_checks">
+            <field name="name">Checks</field>
+            <field name="res_model">monitoring.check</field>
+            <field name="domain">[('plan', 'in', Eval('active_ids'))]</field>
+        </record>
+        <record model="ir.action.keyword" id="act_plan_checks_keyword1">
+            <field name="keyword">form_relate</field>
+            <field name="model">monitoring.check.plan,-1</field>
+            <field name="action" ref="act_plan_checks"/>
+        </record>
+
+        <record model="ir.action.act_window" id="act_asset_checks">
+            <field name="name">Checks</field>
+            <field name="res_model">monitoring.check</field>
+            <field name="domain">[('asset', 'in', Eval('active_ids'))]</field>
+        </record>
+        <record model="ir.action.keyword" id="act_asset_checks_keyword1">
+            <field name="keyword">form_relate</field>
+            <field name="model">asset,-1</field>
+            <field name="action" ref="act_asset_checks"/>
+        </record>
+
         <!-- Menus -->
         <menuitem id="menu_network_monitoring" name="Monitoring" sequence="100"
             parent="asset.menu_asset"/>
@@ -412,8 +596,10 @@
             <field name="group" ref="group_network_monitoring"/>
           </record>
 
-        <menuitem action="act_monitoring_alert" id="menu_monitoring_alert"
-            parent="menu_network_monitoring" sequence="1" name="Alerts"/>
+        <menuitem action="act_monitoring_state_type" id="menu_monitoring_state_type"
+            parent="menu_network_monitoring" sequence="1" name="State Types"/>
+        <menuitem action="act_monitoring_state_indicator" id="menu_monitoring_state_indicator"
+            parent="menu_network_monitoring" sequence="1" name="State Indicators"/>
         <menuitem action="act_monitoring_check" id="menu_monitoring_check"
             parent="menu_network_monitoring" sequence="1" name="Checks"/>
         <menuitem action="act_monitoring_result_char"

@@ -3,19 +3,28 @@
 from trytond.pool import Pool
 from .monitoring import *
 
+__all__ = ['CheckType', 'ResultType', 'StateType', 'StateIndicator',
+    'StateIndicatorLine', 'Scheduler', 'CheckPlan', 'IndicatorCheckPlan',
+    'Check', 'State', 'ResultInteger', 'ResultFloat', 'ResultChar',
+    'AssetPartyNotification', 'Asset', 'Party']
+
 def register():
     Pool.register(
         CheckType,
         ResultType,
+        StateType,
+        StateIndicator,
+        StateIndicatorLine,
         Scheduler,
         CheckPlan,
+        StateIndicatorCheckPlan,
         Check,
+        State,
         ResultInteger,
         ResultFloat,
         ResultChar,
-        Alert,
-        AlertAsset,
         AssetPartyNotification,
         Asset,
+        StateTypeParty,
         Party,
         module='network_monitoring', type_='model')

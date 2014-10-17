@@ -3,6 +3,7 @@
     <xpath expr="/form/notebook" position="inside">
         <page string="Network Monitoring" id="network-monitoring">
             <field name="notification_assets" colspan="4"/>
+            <field name="notification_types" colspan="4"/>
         </page>
     </xpath>
 </data>

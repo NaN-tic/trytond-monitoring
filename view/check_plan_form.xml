@@ -11,6 +11,6 @@
     <field name="scheduler"/>
     <label name="active"/>
     <field name="active"/>
-    <field name="checks" colspan="4"/>
+    <field name="indicators" colspan="4"/>
     <button name="check" string="Check Now" colspan="2"/>
 </form>
