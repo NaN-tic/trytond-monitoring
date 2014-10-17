@@ -3,18 +3,18 @@
 # copyright notices and license terms.
 import unittest
 import trytond.tests.test_tryton
-from trytond.tests.test_tryton import test_view, test_depends  # , doctest_dropdb TODO: Remove if no sceneario needed.
+from trytond.tests.test_tryton import test_view, test_depends
 
 
 class TestCase(unittest.TestCase):
     'Test module'
 
     def setUp(self):
-        trytond.tests.test_tryton.install_module('network_monitoring')
+        trytond.tests.test_tryton.install_module('monitoring')
 
     def test0005views(self):
         'Test views'
-        test_view('network_monitoring')
+        test_view('monitoring')
 
     def test0006depends(self):
         'Test depends'
@@ -24,8 +24,4 @@ class TestCase(unittest.TestCase):
 def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestCase))
-    # TODO: remove if no scenario needed.
-    #suite.addTests(doctest.DocFileSuite('scenario_monitoring.rst',
-    #        setUp=doctest_dropdb, tearDown=doctest_dropdb, encoding='utf-8',
-    #        optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite
