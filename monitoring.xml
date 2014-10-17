@@ -2,27 +2,27 @@
 <tryton>
     <data>
 
-        <record model="res.group" id="group_network_monitoring_admin">
-            <field name="name">Network Monitoring Administration</field>
+        <record model="res.group" id="group_monitoring_admin">
+            <field name="name">Monitoring Administration</field>
         </record>
-        <record model="res.user-res.group" id="user_admin_group_network_monitoring_admin">
+        <record model="res.user-res.group" id="user_admin_group_monitoring_admin">
             <field name="user" ref="res.user_admin"/>
-            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="group" ref="group_monitoring_admin"/>
         </record>
-        <record model="res.user-res.group" id="user_trigger_group_network_monitoring_admin">
+        <record model="res.user-res.group" id="user_trigger_group_monitoring_admin">
             <field name="user" ref="res.user_trigger"/>
-            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="group" ref="group_monitoring_admin"/>
         </record>
-        <record model="res.group" id="group_network_monitoring">
-            <field name="name">Network_monitoring</field>
+        <record model="res.group" id="group_monitoring">
+            <field name="name">Monitoring</field>
         </record>
-        <record model="res.user-res.group" id="user_admin_group_network_monitoring">
+        <record model="res.user-res.group" id="user_admin_group_monitoring">
             <field name="user" ref="res.user_admin"/>
-            <field name="group" ref="group_network_monitoring"/>
+            <field name="group" ref="group_monitoring"/>
         </record>
-        <record model="res.user-res.group" id="user_trigger_group_network_monitoring">
+        <record model="res.user-res.group" id="user_trigger_group_monitoring">
             <field name="user" ref="res.user_trigger"/>
-            <field name="group" ref="group_network_monitoring"/>
+            <field name="group" ref="group_monitoring"/>
         </record>
 
         <!-- monitoring.state.type -->
@@ -59,7 +59,7 @@
         </record>
         <record model="ir.model.access" id="access_monitoring_state_type_admin">
             <field name="model" search="[('model', '=', 'monitoring.state.type')]"/>
-            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="group" ref="group_monitoring_admin"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -100,7 +100,7 @@
         </record>
         <record model="ir.model.access" id="access_monitoring_state_indicator_admin">
             <field name="model" search="[('model', '=', 'monitoring.state.indicator')]"/>
-            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="group" ref="group_monitoring_admin"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -141,7 +141,7 @@
         </record>
         <record model="ir.model.access" id="access_monitoring_state_indicator_line_admin">
             <field name="model" search="[('model', '=', 'monitoring.state.indicator.line')]"/>
-            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="group" ref="group_monitoring_admin"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -158,7 +158,7 @@
         </record>
         <record model="ir.model.access" id="access_monitoring_state_indicator_check_plan_admin">
             <field name="model" search="[('model', '=', 'monitoring.state.indicator-monitoring.check.plan')]"/>
-            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="group" ref="group_monitoring_admin"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -199,7 +199,7 @@
         </record>
         <record model="ir.model.access" id="access_monitoring_state_admin">
             <field name="model" search="[('model', '=', 'monitoring.state')]"/>
-            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="group" ref="group_monitoring_admin"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -216,7 +216,7 @@
         </record>
         <record model="ir.model.access" id="access_monitoring_state_type_party_party_admin">
             <field name="model" search="[('model', '=', 'monitoring.state.type-party.party')]"/>
-            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="group" ref="group_monitoring_admin"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -256,7 +256,7 @@
         </record>
         <record model="ir.model.access" id="access_monitoring_check_admin">
             <field name="model" search="[('model', '=', 'monitoring.check')]"/>
-            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="group" ref="group_monitoring_admin"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -295,7 +295,7 @@
         </record>
         <record model="ir.model.access" id="access_monitoring_check_plan_admin">
             <field name="model" search="[('model', '=', 'monitoring.check.plan')]"/>
-            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="group" ref="group_monitoring_admin"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -334,7 +334,7 @@
         </record>
         <record model="ir.model.access" id="access_monitoring_check_type_admin">
             <field name="model" search="[('model', '=', 'monitoring.check.type')]"/>
-            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="group" ref="group_monitoring_admin"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -373,7 +373,7 @@
         </record>
         <record model="ir.model.access" id="access_monitoring_result_char_admin">
             <field name="model" search="[('model', '=', 'monitoring.result.char')]"/>
-            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="group" ref="group_monitoring_admin"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -412,7 +412,7 @@
         </record>
         <record model="ir.model.access" id="access_monitoring_result_float_admin">
             <field name="model" search="[('model', '=', 'monitoring.result.float')]"/>
-            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="group" ref="group_monitoring_admin"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -451,7 +451,7 @@
         </record>
         <record model="ir.model.access" id="access_monitoring_result_integer_admin">
             <field name="model" search="[('model', '=', 'monitoring.result.integer')]"/>
-            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="group" ref="group_monitoring_admin"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -490,7 +490,7 @@
         </record>
         <record model="ir.model.access" id="access_monitoring_result_type_admin">
             <field name="model" search="[('model', '=', 'monitoring.result.type')]"/>
-            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="group" ref="group_monitoring_admin"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -529,7 +529,7 @@
         </record>
         <record model="ir.model.access" id="access_monitoring_scheduler_admin">
             <field name="model" search="[('model', '=', 'monitoring.scheduler')]"/>
-            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="group" ref="group_monitoring_admin"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -538,7 +538,7 @@
 
         <record model="ir.model.access" id="access_asset_party_notification">
             <field name="model" search="[('model', '=', 'asset-party.party-notification')]"/>
-            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="group" ref="group_monitoring_admin"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -594,33 +594,33 @@
         </record>
 
         <!-- Menus -->
-        <menuitem id="menu_network_monitoring" name="Monitoring" sequence="100"
+        <menuitem id="menu_monitoring" name="Monitoring" sequence="100"
             parent="asset.menu_asset"/>
 
-          <record model="ir.ui.menu-res.group" id="menu_network_monitoring_group_network_monitoring">
-            <field name="menu" ref="menu_network_monitoring"/>
-            <field name="group" ref="group_network_monitoring"/>
+          <record model="ir.ui.menu-res.group" id="menu_monitoring_group_monitoring">
+            <field name="menu" ref="menu_monitoring"/>
+            <field name="group" ref="group_monitoring"/>
           </record>
 
-          <record model="ir.ui.menu-res.group" id="menu_network_monitoring_group_network_monitoring_admin">
-            <field name="menu" ref="menu_network_monitoring"/>
-            <field name="group" ref="group_network_monitoring"/>
+          <record model="ir.ui.menu-res.group" id="menu_monitoring_group_monitoring_admin">
+            <field name="menu" ref="menu_monitoring"/>
+            <field name="group" ref="group_monitoring"/>
           </record>
 
         <menuitem action="act_monitoring_state_type" id="menu_monitoring_state_type"
-            parent="menu_network_monitoring" sequence="1" name="State Types"/>
+            parent="menu_monitoring" sequence="1" name="State Types"/>
         <menuitem action="act_monitoring_state_indicator" id="menu_monitoring_state_indicator"
-            parent="menu_network_monitoring" sequence="1" name="State Indicators"/>
+            parent="menu_monitoring" sequence="1" name="State Indicators"/>
         <menuitem action="act_monitoring_check" id="menu_monitoring_check"
-            parent="menu_network_monitoring" sequence="1" name="Checks"/>
+            parent="menu_monitoring" sequence="1" name="Checks"/>
         <menuitem action="act_monitoring_result_char"
             id="menu_monitoring_result_char" parent="menu_monitoring_check"
             sequence="1" name="Char Results"/>
         <menuitem action="act_monitoring_check_plan"
-            id="menu_monitoring_check_plan" parent="menu_network_monitoring"
+            id="menu_monitoring_check_plan" parent="menu_monitoring"
             sequence="1" name="Check Plans"/>
         <menuitem action="act_monitoring_check_type"
-            id="menu_monitoring_check_type" parent="menu_network_monitoring"
+            id="menu_monitoring_check_type" parent="menu_monitoring"
             sequence="1" name="Check Types"/>
         <menuitem action="act_monitoring_result_float"
             id="menu_monitoring_result_float" parent="menu_monitoring_check"
@@ -629,10 +629,10 @@
             id="menu_monitoring_result_integer" parent="menu_monitoring_check"
             sequence="1" name="Integer Results"/>
         <menuitem action="act_monitoring_result_type"
-            id="menu_monitoring_result_type" parent="menu_network_monitoring"
+            id="menu_monitoring_result_type" parent="menu_monitoring"
             sequence="1" name="Result Types"/>
         <menuitem action="act_monitoring_scheduler"
-            id="menu_monitoring_scheduler" parent="menu_network_monitoring"
+            id="menu_monitoring_scheduler" parent="menu_monitoring"
             sequence="1" name="Monitoring Scheduler"/>
 
         <!-- Uoms -->
@@ -731,7 +731,7 @@
         </record>
         <record model="res.user-res.group" id="user_monitoring_admin_group">
             <field name="user" ref="user_monitoring"/>
-            <field name="group" ref="group_network_monitoring_admin"/>
+            <field name="group" ref="group_monitoring_admin"/>
         </record>
         <record model="res.user-res.group" id="user_asset_admin_group">
             <field name="user" ref="user_monitoring"/>

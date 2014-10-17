@@ -27,4 +27,4 @@ def register():
         Asset,
         StateTypeParty,
         Party,
-        module='network_monitoring', type_='model')
+        module='monitoring', type_='model')
