@@ -750,5 +750,22 @@
             <field name="function">check_all</field>
         </record>
 
+        <!-- State Types -->
+        <record model="monitoring.state.type" id="state_type_ok">
+            <field name="name">Ok</field>
+            <field name="color">green</field>
+        </record>
+        <record model="monitoring.state.type" id="state_type_error">
+            <field name="name">Error</field>
+            <field name="color">red</field>
+        </record>
+        <record model="monitoring.state.type" id="state_type_warning">
+            <field name="name">Warning</field>
+            <field name="color">orange</field>
+        </record>
+        <record model="monitoring.state.type" id="state_type_exception">
+            <field name="name">Exception</field>
+            <field name="color">purple</field>
+        </record>
     </data>
 </tryton>
