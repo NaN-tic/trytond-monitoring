@@ -241,6 +241,7 @@ class StateIndicatorCheckPlan(ModelSQL):
 class Check(ModelSQL, ModelView):
     'Monitoring Check'
     __name__ = 'monitoring.check'
+    _rec_name = 'timestamp'
     timestamp = fields.DateTime('Timestamp', required=True)
     plan = fields.Many2One('monitoring.check.plan', 'Plan', required=True)
     type = fields.Many2One('monitoring.check.type', 'Type', required=True)
