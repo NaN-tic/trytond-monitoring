@@ -4,4 +4,6 @@
 <form string="Monitoring State Type">
     <label name="name"/>
     <field name="name"/>
+    <label name="color"/>
+    <field name="color"/>
 </form>

@@ -44,6 +44,7 @@ class StateType(ModelSQL, ModelView):
     'Monitoring State Value'
     __name__ = 'monitoring.state.type'
     name = fields.Char('Name', translate=True, required=True)
+    color = fields.Char('Color')
 
 
 class StateIndicator(ModelSQL, ModelView):
