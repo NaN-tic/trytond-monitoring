@@ -182,7 +182,8 @@ class CheckPlan(ModelSQL, ModelView):
                         state_type = indicator.default_state_type
                     states_to_create.append({
                             'indicator': indicator.id,
-                            'value': state_type.id,
+                            'state': state_type.id,
+                            'value': unicode(value),
                             })
                     # TODO: Should be improved to take into account previous
                     # state and notify if state is ok again
@@ -241,6 +242,8 @@ class StateIndicatorCheckPlan(ModelSQL, ModelView):
         'get_last_state')
     last_state_type = fields.Function(fields.Many2One('monitoring.state.type',
             'State Type'), 'get_last_state_type')
+    last_state_value = fields.Function(fields.Char('Value'),
+        'get_last_state_value')
     asset = fields.Function(fields.Many2One('asset', 'Asset'), 'get_asset',
         searcher='search_asset')
     color = fields.Function(fields.Char('Color'), 'get_color')
@@ -262,7 +265,13 @@ class StateIndicatorCheckPlan(ModelSQL, ModelView):
         state = self.last_state
         if not state:
             return
-        return state.value.id
+        return state.state.id
+
+    def get_last_state_value(self, name):
+        state = self.last_state
+        if not state:
+            return
+        return self.last_state.value
 
     def get_color(self, name):
         state = self.last_state_type
@@ -309,8 +318,14 @@ class State(ModelSQL, ModelView):
         required=True)
     asset = fields.Function(fields.Many2One('asset', 'Asset'), 'get_asset',
         searcher='search_asset')
-    value = fields.Many2One('monitoring.state.type', 'Value', required=True)
+    state = fields.Many2One('monitoring.state.type', 'State', required=True)
     color = fields.Function(fields.Char('Color'), 'get_color')
+    value = fields.Char('Value')
+
+    @classmethod
+    def __setup__(cls):
+        super(State, cls).__setup__()
+        cls._order.insert(0, ('check', 'DESC'))
 
     def get_asset(self, name):
         return self.check.asset.id
@@ -320,7 +335,7 @@ class State(ModelSQL, ModelView):
         return [('check.asset',) + tuple(clause[1:])]
 
     def get_color(self, name):
-        return self.value.color if self.value else 'black'
+        return self.state.color if self.state else 'black'
 
 
 class ResultInteger(ModelSQL, ModelView):

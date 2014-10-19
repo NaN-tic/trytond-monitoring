@@ -6,6 +6,8 @@
     <field name="check" colspan="3"/>
     <label name="indicator"/>
     <field name="indicator"/>
+    <label name="state"/>
+    <field name="state"/>
     <label name="value"/>
     <field name="value"/>
 </form>

@@ -6,5 +6,6 @@
     <field name="indicator"/>
     <field name="last_check"/>
     <field name="last_state_type"/>
+    <field name="last_state_value"/>
     <field name="color" tree_invisible="1"/>
 </tree>

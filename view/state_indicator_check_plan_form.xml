@@ -12,4 +12,6 @@
     <field name="last_check"/>
     <label name="last_state_type"/>
     <field name="last_state_type"/>
+    <label name="last_state_value"/>
+    <field name="last_state_value"/>
 </form>

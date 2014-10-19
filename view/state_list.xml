@@ -4,6 +4,7 @@
 <tree string="Monitoring State" colors="Eval('color')">
     <field name="check"/>
     <field name="indicator"/>
+    <field name="state"/>
     <field name="value"/>
     <field name="color" tree_invisible="1"/>
 </tree>
