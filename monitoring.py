@@ -13,7 +13,8 @@ from trytond.pyson import Eval
 __all__ = ['CheckType', 'ResultType', 'StateType', 'StateIndicator',
     'StateIndicatorLine', 'Scheduler', 'CheckPlan', 'StateIndicatorCheckPlan',
     'Check', 'State', 'ResultInteger', 'ResultFloat', 'ResultChar',
-    'AssetPartyNotification', 'Asset', 'StateTypeParty', 'Party']
+    'AssetPartyNotification', 'Asset', 'StateTypeParty', 'Party',
+    'RelationType']
 __metaclass__ = PoolMeta
 
 
@@ -381,14 +382,26 @@ class Asset:
     notification_parties = fields.Many2Many('asset-party.party-notification',
         'asset', 'party', 'Notification Parties')
 
-    def get_attribute(self, name):
+    def get_attribute(self, name, browsed=None):
         """
         Returns the value of the given attribute.
 
         Other modules may want to implement their own way of searching for a
         given attribute, for example by considering related items.
         """
-        return self.attributes.get(name) if self.attributes else None
+        if self.attributes and name in self.attributes:
+            return self.attributes[name]
+        if browsed is None:
+            browsed = set()
+        browsed.add(self)
+        for relation in self.relations:
+            if relation.to in browsed:
+                continue
+            if relation.type.search_attributes:
+                value = relation.to.get_attribute(name)
+                if value is not None:
+                    return value
+        return None
 
     def get_states(self, name):
         IndicatorPlan = Pool().get(
@@ -406,12 +419,16 @@ class StateTypeParty(ModelSQL):
 
 class Party:
     __name__ = 'party.party'
+    # TODO: Add calculated One2Many that shows all indicators in its current state.
     notification_assets = fields.Many2Many('asset-party.party-notification',
         'party', 'asset', 'Notification Assets')
     notification_types = fields.Many2Many('monitoring.state.type-party.party',
         'party', 'type', 'Types')
 
-    # TODO: Add calculated One2Many that shows all indicators in its current state.
+
+class RelationType:
+    __name__ = 'asset.relation.type'
+    search_attributes = fields.Boolean('Search Attributes')
 
 
 # Zabbix structure:
