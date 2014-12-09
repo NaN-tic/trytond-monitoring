@@ -6,8 +6,10 @@
     <field name="timestamp"/>
     <label name="plan"/>
     <field name="plan"/>
-    <label name="asset"/>
-    <field name="asset"/>
+    <label name="monitoring_asset"/>
+    <field name="monitoring_asset"/>
+    <label name="monitored_asset"/>
+    <field name="monitored_asset"/>
     <label name="type"/>
     <field name="type"/>
     <group col="3" colspan="4" id="results" yfill="1" yexpand="1">

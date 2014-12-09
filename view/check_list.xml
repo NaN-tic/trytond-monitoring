@@ -3,6 +3,6 @@
      copyright notices and license terms. -->
 <tree string="Monitoring Check">
     <field name="timestamp"/>
-    <field name="asset"/>
+    <field name="monitoring_asset"/>
     <field name="type"/>
 </tree>

@@ -98,7 +98,10 @@ class Scheduler(ModelSQL, ModelView):
 class CheckPlan(ModelSQL, ModelView):
     'Monitoring Check Plan'
     __name__ = 'monitoring.check.plan'
-    asset = fields.Many2One('asset', 'Asset', required=True)
+    monitoring_asset = fields.Many2One('asset', 'Monitoring Asset',
+        required=True)
+    # TODO: Make monitored_asset required?
+    monitored_asset = fields.Many2One('asset', 'Monitored Asset')
     type = fields.Many2One('monitoring.check.type', 'Type', required=True)
     scheduler = fields.Many2One('monitoring.scheduler', 'Scheduler',
         required=True)
@@ -107,6 +110,15 @@ class CheckPlan(ModelSQL, ModelView):
     indicators = fields.Many2Many(
         'monitoring.state.indicator-monitoring.check.plan', 'plan', 'indicator',
         'State Indicators')
+    attribute_set = fields.Many2One('asset.attribute.set', 'Set')
+    attributes = fields.Dict('asset.attribute', 'Attributes',
+        domain=[
+            ('sets', '=', Eval('attribute_set', -1)),
+            ],
+        depends=['attribute_set'],
+        states={
+            'readonly': ~Eval('attribute_set', {}),
+            })
 
     @classmethod
     def __setup__(cls):
@@ -199,7 +211,9 @@ class CheckPlan(ModelSQL, ModelView):
                     'timestamp': datetime.now(),
                     'plan': plan.id,
                     'type': plan.type.id,
-                    'asset': plan.asset.id,
+                    'monitoring_asset': plan.monitoring_asset.id,
+                    'monitored_asset': (plan.monitored_asset.id
+                        if plan.monitored_asset else None),
                     'integer_results': [('create', integer_to_create)],
                     'float_results': [('create', float_to_create)],
                     'char_results': [('create', char_to_create)],
@@ -230,6 +244,15 @@ class CheckPlan(ModelSQL, ModelView):
 
         Plan.check(Plan.browse([x.id for x in to_check]))
 
+    def get_attribute(self, name):
+        """
+        Returns the value of the given attribute. If attribute is not set in
+        the plan, it will be searched in the monitored asset.
+        """
+        if self.attributes and name in self.attributes:
+            return self.attributes[name]
+        return self.monitored_asset.get_attribute(name)
+
 
 class StateIndicatorCheckPlan(ModelSQL, ModelView):
     'Monitoring State Indicator - Monitoring Check Plan'
@@ -245,8 +268,10 @@ class StateIndicatorCheckPlan(ModelSQL, ModelView):
             'State Type'), 'get_last_state_type')
     last_state_value = fields.Function(fields.Char('Value'),
         'get_last_state_value')
-    asset = fields.Function(fields.Many2One('asset', 'Asset'), 'get_asset',
-        searcher='search_asset')
+    monitoring_asset = fields.Function(fields.Many2One('asset',
+            'Monitoring Asset'), 'get_asset', searcher='search_asset')
+    monitored_asset = fields.Function(fields.Many2One('asset',
+            'Monitored Asset'), 'get_asset', searcher='search_asset')
     color = fields.Function(fields.Char('Color'), 'get_color')
 
     def get_last_check(self, name):
@@ -281,11 +306,15 @@ class StateIndicatorCheckPlan(ModelSQL, ModelView):
         return state.color
 
     def get_asset(self, name):
-        return self.plan.asset.id
+        # TODO: Should probably be replaced by monitored_asset but it is not
+        # required
+        asset = getattr(self.plan, name)
+        if asset:
+            return asset.id
 
     @classmethod
     def search_asset(cls, name, clause):
-        return [('plan.asset',) + tuple(clause[1:])]
+        return [('plan.%s' % name,) + tuple(clause[1:])]
 
 
 class Check(ModelSQL, ModelView):
@@ -295,7 +324,9 @@ class Check(ModelSQL, ModelView):
     timestamp = fields.DateTime('Timestamp', required=True)
     plan = fields.Many2One('monitoring.check.plan', 'Plan', required=True)
     type = fields.Many2One('monitoring.check.type', 'Type', required=True)
-    asset = fields.Many2One('asset', 'Asset', required=True)
+    monitoring_asset = fields.Many2One('asset', 'Monitoring Asset',
+        required=True)
+    monitored_asset = fields.Many2One('asset', 'Monitored Asset')
     integer_results = fields.One2Many('monitoring.result.integer', 'check',
         'Integer Results')
     float_results = fields.One2Many('monitoring.result.float', 'check',
@@ -317,8 +348,10 @@ class State(ModelSQL, ModelView):
     check = fields.Many2One('monitoring.check', 'Check', required=True)
     indicator = fields.Many2One('monitoring.state.indicator', 'Indicator',
         required=True)
-    asset = fields.Function(fields.Many2One('asset', 'Asset'), 'get_asset',
-        searcher='search_asset')
+    monitoring_asset = fields.Function(fields.Many2One('asset',
+            'Monitoring Asset'), 'get_asset', searcher='search_asset')
+    monitored_asset = fields.Function(fields.Many2One('asset',
+            'Monitored Asset'), 'get_asset', searcher='search_asset')
     state = fields.Many2One('monitoring.state.type', 'State', required=True)
     color = fields.Function(fields.Char('Color'), 'get_color')
     value = fields.Char('Value')
@@ -329,11 +362,11 @@ class State(ModelSQL, ModelView):
         cls._order.insert(0, ('check', 'DESC'))
 
     def get_asset(self, name):
-        return self.check.asset.id
+        return getattr(self.check, name)
 
     @classmethod
     def search_asset(cls, name, clause):
-        return [('check.asset',) + tuple(clause[1:])]
+        return [('check.%s' % name,) + tuple(clause[1:])]
 
     def get_color(self, name):
         return self.state.color if self.state else 'black'
@@ -374,13 +407,18 @@ class AssetPartyNotification(ModelSQL):
 
 class Asset:
     __name__ = 'asset'
-    plans = fields.One2Many('monitoring.check.plan', 'asset', 'Check Plans')
-    checks = fields.One2Many('monitoring.check', 'asset', 'Checks')
+    plans = fields.One2Many('monitoring.check.plan', 'monitoring_asset',
+        'Check Plans')
+    checks = fields.One2Many('monitoring.check', 'monitoring_asset', 'Checks')
     states = fields.Function(fields.One2Many(
             'monitoring.state.indicator-monitoring.check.plan', None, 'States'),
         'get_states')
     notification_parties = fields.Many2Many('asset-party.party-notification',
         'asset', 'party', 'Notification Parties')
+    login = fields.Char('Login')
+    password_hash = fields.Char('Password Hash')
+    password = fields.Function(fields.Char('Password'), getter='get_password',
+        setter='set_password')
 
     def get_attribute(self, name, browsed=None):
         """
@@ -406,8 +444,197 @@ class Asset:
     def get_states(self, name):
         IndicatorPlan = Pool().get(
             'monitoring.state.indicator-monitoring.check.plan')
-        records = IndicatorPlan.search([('asset', '=', self.id)])
+        records = IndicatorPlan.search([('monitoring_asset', '=', self.id)])
         return [x.id for x in records]
+
+    def get_password(self, name):
+        return 'x' * 10
+
+    @classmethod
+    def set_password(cls, users, name, value):
+        if value == 'x' * 10:
+            return
+        to_write = []
+        for user in users:
+            to_write.extend([[user], {
+                        'password_hash': cls.hash_password(value),
+                        }])
+        cls.write(*to_write)
+
+    @classmethod
+    def _get_login(cls, login):
+        if result:
+            return result
+        cursor = Transaction().cursor
+        table = cls.__table__()
+        cursor.execute(*table.select(table.id, table.password_hash,
+                where=(table.login == login) & table.active))
+        result = cursor.fetchone() or (None, None)
+        return result
+
+    @classmethod
+    def get_login(cls, login, password):
+        '''
+        Return user id if password matches
+        '''
+        user_id, password_hash = cls._get_login(login)
+        if user_id:
+            if cls.check_password(password, password_hash):
+                return user_id
+        return 0
+
+    @staticmethod
+    def hash_method():
+        return 'bcrypt' if bcrypt else 'sha1'
+
+    @classmethod
+    def hash_password(cls, password):
+        '''Hash given password in the form
+        <hash_method>$<password>$<salt>...'''
+        if not password:
+            return ''
+        return getattr(cls, 'hash_' + cls.hash_method())(password)
+
+    @classmethod
+    def check_password(cls, password, hash_):
+        if not hash_:
+            return False
+        hash_method = hash_.split('$', 1)[0]
+        return getattr(cls, 'check_' + hash_method)(password, hash_)
+
+    @classmethod
+    def hash_sha1(cls, password):
+        if isinstance(password, unicode):
+            password = password.encode('utf-8')
+        salt = ''.join(random.sample(string.ascii_letters + string.digits, 8))
+        hash_ = hashlib.sha1(password + salt).hexdigest()
+        return '$'.join(['sha1', hash_, salt])
+
+    @classmethod
+    def check_sha1(cls, password, hash_):
+        if isinstance(password, unicode):
+            password = password.encode('utf-8')
+        if isinstance(hash_, unicode):
+            hash_ = hash_.encode('utf-8')
+        hash_method, hash_, salt = hash_.split('$', 2)
+        salt = salt or ''
+        assert hash_method == 'sha1'
+        return hash_ == hashlib.sha1(password + salt).hexdigest()
+
+    @classmethod
+    def hash_bcrypt(cls, password):
+        if isinstance(password, unicode):
+            password = password.encode('utf-8')
+        hash_ = bcrypt.hashpw(password, bcrypt.gensalt())
+        return '$'.join(['bcrypt', hash_])
+
+    @classmethod
+    def check_bcrypt(cls, password, hash_):
+        if isinstance(password, unicode):
+            password = password.encode('utf-8')
+        if isinstance(hash_, unicode):
+            hash_ = hash_.encode('utf-8')
+        hash_method, hash_ = hash_.split('$', 1)
+        assert hash_method == 'bcrypt'
+        return hash_ == bcrypt.hashpw(password, hash_)
+
+    @staticmethod
+    def object_to_dict(obj):
+        res = {}
+        fields = [name for name, field in obj._fields.iteritems()
+            if isinstance(field, fields.Field)]
+        res['id'] = obj.id
+        for name, field in obj._fields.iteritems():
+            value = getattr(obj, name)
+            if isinstance(field, (fields.Function, fields.One2Many,
+                        fields.Many2Many)):
+                continue
+            if isinstance(field, fields.Many2One) and value:
+                value = value.id
+            elif isinstance(field, fields.Reference) and value:
+                # TODO: Reference fields
+                value = ''
+            res[name] = value
+        return res
+
+    @staticmethod
+    def export_objects(objects):
+        res = []
+        for obj in objects:
+            res.append(cls.object_to_dict(obj))
+        return res
+
+    @staticmethod
+    def dict_to_object(record, cls):
+        obj = cls()
+        for name, value in record.iteritems():
+            setattr(obj, name, value)
+        return obj
+
+    @staticmethod
+    def import_objects(records, cls):
+        res = []
+        for record in records:
+            res.append(cls.dict_to_object(record, cls))
+        return res
+
+    def fetch_remote_assets(cls, login, password):
+        AssetRelationAll = Pool().get('asset.relation.all')
+
+        asset_id = cls.get_login(login, password)
+        if not asset_id:
+            return
+        asset = cls(asset_id)
+
+        products = []
+
+        assets = []
+        assets.append(asset)
+        #assets.append({
+        #        'name', asset.name,
+        #        })
+
+        #for relation in AssetRelationAll.search([
+        #            ('type.search_attributes', '=', True),
+        #            ('to', '=', asset_id),
+        #            ]):
+        #    assets.append(relation.from_)
+        plans = []
+        schedulers = set()
+        types = set()
+        for asset in assets:
+            for plan in asset.plans:
+                plans.append(plan)
+                schedulers.add(plan.scheduler)
+                # Types should be available in the remote host
+                #types.add(plan.type)
+
+        data = {}
+        data['schedulers'] = cls.export_objects(list(schedulers))
+        # Types should be available in the remote host
+        #data['types'] = cls.export_objects(list(types))
+        data['plans'] = cls.export_objects(plans)
+        data['assets'] = cls.export_objects(assets)
+        return data
+
+    def update_remote_checks(cls, login, password, data):
+        if not cls.get_login(login, password):
+            return
+
+        pool = Pool()
+        Check = pool.get('monitoring.check')
+        IntegerResult = pool.get('monitoring.result.integer')
+        FloatResult = pool.get('monitoring.result.float')
+        CharResult = pool.get('monitoring.result.char')
+
+        objs = cls.import_objects(data['checks'], Check)
+        Check.save(objs)
+        cls.import_objects(data['integer_results'], IntegerResult)
+        IntegerResult.save(objs)
+        cls.import_objects(data['float_results'], FloatResult)
+        FloatResult.save(objs)
+        cls.import_objects(data['char_results'], CharResult)
+        CharResult.save(objs)
 
 
 class StateTypeParty(ModelSQL):
@@ -419,7 +646,8 @@ class StateTypeParty(ModelSQL):
 
 class Party:
     __name__ = 'party.party'
-    # TODO: Add calculated One2Many that shows all indicators in its current state.
+    # TODO: Add calculated One2Many that shows all indicators in their current
+    # state. Should it include states of related assets?
     notification_assets = fields.Many2Many('asset-party.party-notification',
         'party', 'asset', 'Notification Assets')
     notification_types = fields.Many2Many('monitoring.state.type-party.party',

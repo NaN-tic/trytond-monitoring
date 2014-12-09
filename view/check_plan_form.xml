@@ -2,8 +2,8 @@
 <!-- The COPYRIGHT file at the top level of this repository contains the full
      copyright notices and license terms. -->
 <form string="Monitoring Check Plan">
-    <label name="asset"/>
-    <field name="asset"/>
+    <label name="monitoring_asset"/>
+    <field name="monitoring_asset"/>
     <newline/>
     <label name="type"/>
     <field name="type"/>
@@ -11,6 +11,12 @@
     <field name="scheduler"/>
     <label name="active"/>
     <field name="active"/>
+    <newline/>
+    <label name="monitored_asset"/>
+    <field name="monitored_asset"/>
+    <label name="attribute_set"/>
+    <field name="attribute_set"/>
+    <field name="attributes" colspan="4"/>
     <field name="indicators" colspan="4"/>
     <button name="check" string="Check Now" colspan="2"/>
 </form>

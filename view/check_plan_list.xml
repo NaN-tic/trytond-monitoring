@@ -2,7 +2,7 @@
 <!-- The COPYRIGHT file at the top level of this repository contains the full
      copyright notices and license terms. -->
 <tree string="Monitoring Check Plan">
-    <field name="asset"/>
+    <field name="monitoring_asset"/>
     <field name="type"/>
     <field name="scheduler"/>
     <button name="check" string="Check Now"/>

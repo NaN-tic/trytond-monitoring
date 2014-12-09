@@ -600,7 +600,7 @@
         <record model="ir.action.act_window" id="act_asset_states">
             <field name="name">States</field>
             <field name="res_model">monitoring.state</field>
-            <field name="domain">[('asset', 'in', Eval('active_ids'))]</field>
+            <field name="domain">[('monitoring_asset', 'in', Eval('active_ids'))]</field>
         </record>
         <record model="ir.action.keyword" id="act_asset_states_keyword1">
             <field name="keyword">form_relate</field>
@@ -622,7 +622,7 @@
         <record model="ir.action.act_window" id="act_asset_checks">
             <field name="name">Checks</field>
             <field name="res_model">monitoring.check</field>
-            <field name="domain">[('asset', 'in', Eval('active_ids'))]</field>
+            <field name="domain">[('monitoring_asset', 'in', Eval('active_ids'))]</field>
         </record>
         <record model="ir.action.keyword" id="act_asset_checks_keyword1">
             <field name="keyword">form_relate</field>

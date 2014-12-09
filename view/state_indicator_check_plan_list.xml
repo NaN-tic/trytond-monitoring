@@ -2,7 +2,7 @@
 <!-- The COPYRIGHT file at the top level of this repository contains the full
      copyright notices and license terms. -->
 <tree string="Current State" colors="Eval('color')">
-    <field name="asset"/>
+    <field name="monitoring_asset"/>
     <field name="indicator"/>
     <field name="last_check"/>
     <field name="last_state_type"/>
