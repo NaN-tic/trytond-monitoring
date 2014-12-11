@@ -755,9 +755,6 @@ class Asset:
         CharResult = pool.get('monitoring.result.char')
         CheckPlan = pool.get('monitoring.check.plan')
 
-        # TODO: Result and Check types need to be properly synchronized
-        # Now they work only if modules were installed in the same
-        # order on both ends.
         if not data['checks']:
             return
         peer = cls(data['checks'][0]['monitoring_asset']).login
