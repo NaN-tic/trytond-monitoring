@@ -790,6 +790,19 @@
             <field name="function">check_all</field>
         </record>
 
+        <record model="ir.cron" id="cron_slave">
+            <field name="name">Monitoring Slave</field>
+            <field name="request_user" ref="res.user_admin"/>
+            <field name="user" ref="user_monitoring"/>
+            <field name="active" eval="True"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="number_calls">-1</field>
+            <field name="repeat_missed" eval="False"/>
+            <field name="model">asset</field>
+            <field name="function">sync</field>
+        </record>
+
         <!-- State Types -->
         <record model="monitoring.state.type" id="state_type_ok">
             <field name="name">Ok</field>

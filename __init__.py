@@ -19,6 +19,7 @@ def register():
         ResultFloat,
         ResultChar,
         AssetPartyNotification,
+        SynchroMapping,
         Asset,
         StateTypeParty,
         Party,

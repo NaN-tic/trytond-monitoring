@@ -1,20 +1,35 @@
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
 import sys
-import ast
+#import ast
+import xmlrpclib
 from datetime import datetime
+import random
+import string
+import hashlib
+from itertools import izip, chain
+from decimal import Decimal
+import logging
+
+try:
+    import bcrypt
+except ImportError:
+    bcrypt = None
 
 from trytond.tools import safe_eval
 from trytond.model import ModelSQL, ModelView, fields
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
+from trytond.config import config
+from trytond.rpc import RPC
+from trytond.transaction import Transaction
 
 
 __all__ = ['CheckType', 'ResultType', 'StateType', 'StateIndicator',
     'StateIndicatorLine', 'Scheduler', 'CheckPlan', 'StateIndicatorCheckPlan',
     'Check', 'State', 'ResultInteger', 'ResultFloat', 'ResultChar',
-    'AssetPartyNotification', 'Asset', 'StateTypeParty', 'Party',
-    'RelationType']
+    'AssetPartyNotification', 'SynchroMapping', 'Asset', 'StateTypeParty',
+    'Party', 'RelationType']
 __metaclass__ = PoolMeta
 
 
@@ -131,6 +146,43 @@ class CheckPlan(ModelSQL, ModelView):
     def default_active():
         return True
 
+    @staticmethod
+    def get_indicators(plan, type_, value):
+        states_to_create = []
+        for indicator in plan.indicators:
+            if indicator.result_type != type_:
+                continue
+            state_type = None
+            for line in indicator.lines:
+                #ast.literal_eval(indicator.expression)
+                if safe_eval(line.expression, {
+                            'value': value,
+                            }):
+                    state_type = line.state_type
+                    break
+            if not state_type:
+                state_type = indicator.default_state_type
+            states_to_create.append({
+                    'indicator': indicator.id,
+                    'state': state_type.id,
+                    'value': unicode(value),
+                    })
+        return states_to_create
+
+    @classmethod
+    def create_indicators(cls, checks):
+        State = Pool().get('monitoring.state')
+        to_create = []
+        for check in checks:
+            for result in chain(check.integer_results, check.float_results,
+                    check.char_results):
+                vals = cls.get_indicators(check.plan, result.type,
+                    result.value)
+                for state in vals:
+                    state['check'] = check.id
+                to_create += vals
+        State.create(to_create)
+
     @classmethod
     @ModelView.button
     @ModelView.button
@@ -179,33 +231,7 @@ class CheckPlan(ModelSQL, ModelView):
                         % (t.type, result['result']))
                     continue
 
-                states_to_create = []
-                for indicator in plan.indicators:
-                    if indicator.result_type != t:
-                        continue
-                    state_type = None
-                    for line in indicator.lines:
-                        #ast.literal_eval(indicator.expression)
-                        if safe_eval(line.expression, {
-                                    'value': value,
-                                    }):
-                            state_type = line.state_type
-                            break
-                    if not state_type:
-                        state_type = indicator.default_state_type
-                    states_to_create.append({
-                            'indicator': indicator.id,
-                            'state': state_type.id,
-                            'value': unicode(value),
-                            })
-                    # TODO: Should be improved to take into account previous
-                    # state and notify if state is ok again
-
-                    # Maybe standard triggers will be enough by now
-                    #for party in asset.notification_parties:
-                        #if state_type in party.notification_types:
-                            #Template.render_and_send(configuration.email_template.id, [notification])
-
+                states_to_create = cls.get_indicators(plan, t, value)
 
             to_create.append({
                     'timestamp': datetime.now(),
@@ -251,7 +277,12 @@ class CheckPlan(ModelSQL, ModelView):
         """
         if self.attributes and name in self.attributes:
             return self.attributes[name]
-        return self.monitored_asset.get_attribute(name)
+        value = None
+        if self.monitored_asset:
+            value = self.monitored_asset.get_attribute(name)
+        if value is None:
+            value = self.monitoring_asset.get_attribute(name)
+        return value
 
 
 class StateIndicatorCheckPlan(ModelSQL, ModelView):
@@ -306,8 +337,6 @@ class StateIndicatorCheckPlan(ModelSQL, ModelView):
         return state.color
 
     def get_asset(self, name):
-        # TODO: Should probably be replaced by monitored_asset but it is not
-        # required
         asset = getattr(self.plan, name)
         if asset:
             return asset.id
@@ -345,7 +374,8 @@ class State(ModelSQL, ModelView):
     'Monitoring State'
     __name__ = 'monitoring.state'
     _rec_name = 'check'
-    check = fields.Many2One('monitoring.check', 'Check', required=True)
+    check = fields.Many2One('monitoring.check', 'Check', required=True,
+        ondelete='CASCADE')
     indicator = fields.Many2One('monitoring.state.indicator', 'Indicator',
         required=True)
     monitoring_asset = fields.Function(fields.Many2One('asset',
@@ -375,7 +405,8 @@ class State(ModelSQL, ModelView):
 class ResultInteger(ModelSQL, ModelView):
     'Monitoring Result Integer'
     __name__ = 'monitoring.result.integer'
-    check = fields.Many2One('monitoring.check', 'Check', required=True)
+    check = fields.Many2One('monitoring.check', 'Check', required=True,
+        ondelete='CASCADE')
     type = fields.Many2One('monitoring.result.type', 'Type', required=True)
     value = fields.Integer('Value')
     uom = fields.Many2One('product.uom', 'UoM', required=True)
@@ -384,7 +415,8 @@ class ResultInteger(ModelSQL, ModelView):
 class ResultFloat(ModelSQL, ModelView):
     'Monitoring Result Float'
     __name__ = 'monitoring.result.float'
-    check = fields.Many2One('monitoring.check', 'Check', required=True)
+    check = fields.Many2One('monitoring.check', 'Check', required=True,
+        ondelete='CASCADE')
     type = fields.Many2One('monitoring.result.type', 'Type', required=True)
     value = fields.Float('Value')
     uom = fields.Many2One('product.uom', 'UoM', required=True)
@@ -393,7 +425,8 @@ class ResultFloat(ModelSQL, ModelView):
 class ResultChar(ModelSQL, ModelView):
     'Monitoring Result Char'
     __name__ = 'monitoring.result.char'
-    check = fields.Many2One('monitoring.check', 'Check', required=True)
+    check = fields.Many2One('monitoring.check', 'Check', required=True,
+        ondelete='CASCADE')
     type = fields.Many2One('monitoring.result.type', 'Type', required=True)
     value = fields.Char('Value')
 
@@ -403,6 +436,22 @@ class AssetPartyNotification(ModelSQL):
     __name__ = 'asset-party.party-notification'
     asset = fields.Many2One('asset', 'Asset', required=True)
     party = fields.Many2One('party.party', 'Party', required=True)
+
+
+class SynchroMapping(ModelSQL):
+    'Synchronization Mapping'
+    __name__ = 'synchro.mapping'
+    local_id = fields.Integer('Local ID', required=True)
+    remote_id = fields.Integer('Remote ID', required=True)
+    model = fields.Char('Model Name', required=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(SynchroMapping, cls).__setup__()
+        cls._sql_constraints += [
+            ('remote_id_model_uniq', 'UNIQUE(remote_id, model)',
+                'remote_id and model must be unique.')
+            ]
 
 
 class Asset:
@@ -419,6 +468,14 @@ class Asset:
     password_hash = fields.Char('Password Hash')
     password = fields.Function(fields.Char('Password'), getter='get_password',
         setter='set_password')
+
+    @classmethod
+    def __setup__(cls):
+        super(Asset, cls).__setup__()
+        cls.__rpc__.update({
+                'update_remote_checks': RPC(readonly=False),
+                'fetch_remote_assets': RPC(),
+                })
 
     def get_attribute(self, name, browsed=None):
         """
@@ -463,8 +520,6 @@ class Asset:
 
     @classmethod
     def _get_login(cls, login):
-        if result:
-            return result
         cursor = Transaction().cursor
         table = cls.__table__()
         cursor.execute(*table.select(table.id, table.password_hash,
@@ -539,11 +594,21 @@ class Asset:
         return hash_ == bcrypt.hashpw(password, hash_)
 
     @staticmethod
-    def object_to_dict(obj):
+    def object_to_dict(obj, mappings=None, model_data=False):
+        ModelData = Pool().get('ir.model.data')
+        if mappings is None:
+            mappings = {}
         res = {}
-        fields = [name for name, field in obj._fields.iteritems()
-            if isinstance(field, fields.Field)]
         res['id'] = obj.id
+        if model_data:
+            records = ModelData.search([
+                    ('db_id', '=', obj.id),
+                    ('model', '=', obj.__name__),
+                    ])
+            value = None
+            if records:
+                value = (records[0].module, records[0].fs_id)
+            res['__model_data__'] = value
         for name, field in obj._fields.iteritems():
             value = getattr(obj, name)
             if isinstance(field, (fields.Function, fields.One2Many,
@@ -554,35 +619,82 @@ class Asset:
             elif isinstance(field, fields.Reference) and value:
                 # TODO: Reference fields
                 value = ''
+            if name in mappings and value:
+                remote, = SynchroMapping.search([
+                        ('local_id', '=', value),
+                        ('model', '=', mappings[name]),
+                        ])
+                value = remote.remote_id
             res[name] = value
         return res
 
     @staticmethod
-    def export_objects(objects):
+    def export_objects(objects, mappings=None, model_data=False):
         res = []
         for obj in objects:
-            res.append(cls.object_to_dict(obj))
+            res.append(Asset.object_to_dict(obj, mappings=mappings,
+                    model_data=model_data))
         return res
 
     @staticmethod
-    def dict_to_object(record, cls):
+    def dict_to_object(record, cls, overrides=None, mappings=None):
+        SynchroMapping = Pool().get('synchro.mapping')
+        if overrides is None:
+            overrides = {}
+        if mappings is None:
+            mappings = {}
         obj = cls()
         for name, value in record.iteritems():
+            if name == '__model_data__':
+                continue
+            value = overrides.get(name, value)
+            if name in mappings and value:
+                local, = SynchroMapping.search([
+                        ('remote_id', '=', value),
+                        ('model', '=', mappings[name]),
+                        ])
+                value = local.local_id
             setattr(obj, name, value)
         return obj
 
     @staticmethod
-    def import_objects(records, cls):
-        res = []
-        for record in records:
-            res.append(cls.dict_to_object(record, cls))
-        return res
+    def import_objects(records, cls, overrides=None, mappings=None):
+        SynchroMapping = Pool().get('synchro.mapping')
+        ModelData = Pool().get('ir.model.data')
 
+        to_create = []
+        new_records = []
+        map_records = []
+        for record in records:
+            if '__model_data__' in record:
+                value = record['__model_data__']
+                map_records.append({
+                        'local_id': ModelData.get_id(value[0], value[1]),
+                        'remote_id': record['id'],
+                        'model': cls.__name__,
+                        })
+                continue
+            to_create.append(Asset.dict_to_object(record, cls, overrides, mappings))
+            new_records.append(record)
+        local_objects = cls.create([x._save_values for x in to_create])
+        for local, remote in izip(local_objects, new_records):
+            map_records.append({
+                    'local_id': local.id,
+                    'remote_id': remote['id'],
+                    'model': cls.__name__,
+                    })
+        SynchroMapping.create(map_records)
+        return local_objects
+
+    @classmethod
     def fetch_remote_assets(cls, login, password):
         AssetRelationAll = Pool().get('asset.relation.all')
+        ResultType = Pool().get('monitoring.result.type')
 
         asset_id = cls.get_login(login, password)
         if not asset_id:
+            logger.getLogger('monitoring').error('No asset found for login %s' %
+                login)
             return
         asset = cls(asset_id)
 
@@ -601,22 +713,25 @@ class Asset:
         #    assets.append(relation.from_)
         plans = []
         schedulers = set()
-        types = set()
+        check_types = set()
         for asset in assets:
             for plan in asset.plans:
                 plans.append(plan)
                 schedulers.add(plan.scheduler)
-                # Types should be available in the remote host
-                #types.add(plan.type)
+                check_types.add(plan.type)
+
+        result_types = ResultType.search([])
 
         data = {}
         data['schedulers'] = cls.export_objects(list(schedulers))
-        # Types should be available in the remote host
-        #data['types'] = cls.export_objects(list(types))
+        data['check_types'] = cls.export_objects(list(check_types),
+            model_data=True)
+        data['result_types'] = cls.export_objects(result_types, model_data=True)
         data['plans'] = cls.export_objects(plans)
         data['assets'] = cls.export_objects(assets)
         return data
 
+    @classmethod
     def update_remote_checks(cls, login, password, data):
         if not cls.get_login(login, password):
             return
@@ -626,15 +741,109 @@ class Asset:
         IntegerResult = pool.get('monitoring.result.integer')
         FloatResult = pool.get('monitoring.result.float')
         CharResult = pool.get('monitoring.result.char')
+        CheckPlan = pool.get('monitoring.check.plan')
 
-        objs = cls.import_objects(data['checks'], Check)
-        Check.save(objs)
-        cls.import_objects(data['integer_results'], IntegerResult)
-        IntegerResult.save(objs)
-        cls.import_objects(data['float_results'], FloatResult)
-        FloatResult.save(objs)
-        cls.import_objects(data['char_results'], CharResult)
-        CharResult.save(objs)
+        # TODO: Result and Check types need to be properly synchronized
+        # Now they work only if modules were installed in the same
+        # order on both ends.
+        checks = cls.import_objects(data['checks'], Check)
+        cls.import_objects(data['integer_results'], IntegerResult,
+            mappings={
+                'check': 'monitoring.check',
+                })
+        cls.import_objects(data['float_results'], FloatResult,
+            mappings={
+                'check': 'monitoring.check',
+                })
+        cls.import_objects(data['char_results'], CharResult,
+            mappings={
+                'check': 'monitoring.check',
+                })
+        CheckPlan.create_indicators(Check.browse([x.id for x in checks]))
+
+    @classmethod
+    def sync(cls):
+        pool = Pool()
+        Check = pool.get('monitoring.check')
+        IntegerResult = pool.get('monitoring.result.integer')
+        FloatResult = pool.get('monitoring.result.float')
+        CharResult = pool.get('monitoring.result.char')
+        Plan = pool.get('monitoring.check.plan')
+        Scheduler = pool.get('monitoring.scheduler')
+        Asset = pool.get('asset')
+        Product = pool.get('product.product')
+        Template = pool.get('product.template')
+        SynchroMapping = pool.get('synchro.mapping')
+        ModelData = pool.get('ir.model.data')
+        CheckType = pool.get('monitoring.check.type')
+        ResultType = pool.get('monitoring.result.type')
+
+        data = {}
+        checks = Check.search([])
+        data['checks'] = cls.export_objects(checks, mappings={
+                'plan': 'monitoring.check.plan',
+                'monitoring_asset': 'asset',
+                'monitored_asset': 'asset',
+                })
+        integers = IntegerResult.search([])
+        data['integer_results'] = cls.export_objects(integers)
+        floats = FloatResult.search([])
+        data['float_results'] = cls.export_objects(floats)
+        chars = CharResult.search([])
+        data['char_results'] = cls.export_objects(chars)
+
+        uri = config.get('monitoring', 'uri')
+        username = config.get('monitoring', 'username')
+        password = config.get('monitoring', 'password')
+        server = xmlrpclib.ServerProxy(uri, allow_none=True)
+        context = server.model.res.user.get_preferences(True, {})
+        server.model.asset.update_remote_checks(username, password, data, context)
+        data = server.model.asset.fetch_remote_assets(username, password, context)
+
+        Check.delete(checks)
+        IntegerResult.delete(checks)
+        FloatResult.delete(checks)
+        CharResult.delete(checks)
+
+        Plan.delete(Plan.search([]))
+        Scheduler.delete(Scheduler.search([]))
+        Asset.delete(Asset.search([]))
+
+        SynchroMapping.delete(SynchroMapping.search([]))
+
+        # TODO: Maybe create a product with the module and deactivate it by
+        # default. The problem would be if another module adds required fields.
+        asset_product = Product.search([
+                ('type', '=', 'assets'),
+                ('code', '=', 'monitoring'),
+                ], limit=1)
+        if not asset_product:
+            asset_product = Template.create([{
+                        'name': 'Monitoring Asset',
+                        'type': 'assets',
+                        'list_price': Decimal(0),
+                        'cost_price': Decimal(0),
+                        'default_uom': ModelData.get_id('product', 'uom_unit'),
+                        'products': [('create', [{
+                                        'code': 'monitoring',
+                                        }])]
+                        }])
+            asset_product = Product.search([
+                    ('type', '=', 'assets'),
+                    ('code', '=', 'monitoring'),
+                    ], limit=1)
+        asset_product = asset_product[0]
+        cls.import_objects(data['assets'], Asset, overrides={
+                'product': asset_product.id,
+                })
+        cls.import_objects(data['schedulers'], Scheduler)
+        cls.import_objects(data['plans'], Plan, mappings={
+                'monitoring_asset': 'asset',
+                'monitored_asset': 'asset',
+                'scheduler': 'monitoring.scheduler',
+                })
+        cls.import_objects(data['check_types'], CheckType)
+        cls.import_objects(data['result_types'], ResultType)
 
 
 class StateTypeParty(ModelSQL):
