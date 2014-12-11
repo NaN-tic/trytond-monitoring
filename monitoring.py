@@ -441,6 +441,7 @@ class AssetPartyNotification(ModelSQL):
 class SynchroMapping(ModelSQL):
     'Synchronization Mapping'
     __name__ = 'synchro.mapping'
+    peer = fields.Char('Peer', required=True)
     local_id = fields.Integer('Local ID', required=True)
     remote_id = fields.Integer('Remote ID', required=True)
     model = fields.Char('Model Name', required=True)
@@ -452,6 +453,10 @@ class SynchroMapping(ModelSQL):
             ('remote_id_model_uniq', 'UNIQUE(remote_id, model)',
                 'remote_id and model must be unique.')
             ]
+
+    @staticmethod
+    def default_peer():
+        return 'master'
 
 
 class Asset:
@@ -594,7 +599,7 @@ class Asset:
         return hash_ == bcrypt.hashpw(password, hash_)
 
     @staticmethod
-    def object_to_dict(obj, mappings=None, model_data=False):
+    def object_to_dict(obj, peer='master', mappings=None, model_data=False):
         ModelData = Pool().get('ir.model.data')
         if mappings is None:
             mappings = {}
@@ -623,26 +628,29 @@ class Asset:
                 remote, = SynchroMapping.search([
                         ('local_id', '=', value),
                         ('model', '=', mappings[name]),
+                        ('peer', '=', peer),
                         ])
                 value = remote.remote_id
             res[name] = value
         return res
 
     @staticmethod
-    def export_objects(objects, mappings=None, model_data=False):
+    def export_objects(objects, peer='master', mappings=None, model_data=False):
         res = []
         for obj in objects:
-            res.append(Asset.object_to_dict(obj, mappings=mappings,
+            res.append(Asset.object_to_dict(obj, peer=peer, mappings=mappings,
                     model_data=model_data))
         return res
 
     @staticmethod
-    def dict_to_object(record, cls, overrides=None, mappings=None):
+    def dict_to_object(record, cls, peer='master', overrides=None,
+            mappings=None):
         SynchroMapping = Pool().get('synchro.mapping')
         if overrides is None:
             overrides = {}
         if mappings is None:
             mappings = {}
+        #obj = {}
         obj = cls()
         for name, value in record.iteritems():
             if name == '__model_data__':
@@ -652,13 +660,16 @@ class Asset:
                 local, = SynchroMapping.search([
                         ('remote_id', '=', value),
                         ('model', '=', mappings[name]),
+                        ('peer', '=', peer),
                         ])
                 value = local.local_id
+            #obj[name] = value
             setattr(obj, name, value)
         return obj
 
     @staticmethod
-    def import_objects(records, cls, overrides=None, mappings=None):
+    def import_objects(records, cls, peer='master', overrides=None,
+            mappings=None):
         SynchroMapping = Pool().get('synchro.mapping')
         ModelData = Pool().get('ir.model.data')
 
@@ -672,9 +683,11 @@ class Asset:
                         'local_id': ModelData.get_id(value[0], value[1]),
                         'remote_id': record['id'],
                         'model': cls.__name__,
+                        'peer': peer,
                         })
                 continue
-            to_create.append(Asset.dict_to_object(record, cls, overrides, mappings))
+            to_create.append(Asset.dict_to_object(record, cls, peer=peer,
+                    overrides=overrides, mappings=mappings))
             new_records.append(record)
         local_objects = cls.create([x._save_values for x in to_create])
         for local, remote in izip(local_objects, new_records):
@@ -682,6 +695,7 @@ class Asset:
                     'local_id': local.id,
                     'remote_id': remote['id'],
                     'model': cls.__name__,
+                    'peer': peer,
                     })
         SynchroMapping.create(map_records)
         return local_objects
@@ -702,23 +716,20 @@ class Asset:
 
         assets = []
         assets.append(asset)
-        #assets.append({
-        #        'name', asset.name,
-        #        })
-
-        #for relation in AssetRelationAll.search([
-        #            ('type.search_attributes', '=', True),
-        #            ('to', '=', asset_id),
-        #            ]):
-        #    assets.append(relation.from_)
         plans = []
         schedulers = set()
         check_types = set()
-        for asset in assets:
-            for plan in asset.plans:
-                plans.append(plan)
-                schedulers.add(plan.scheduler)
-                check_types.add(plan.type)
+        attribute_sets = set()
+        if asset.attribute_set:
+            attribute_sets.add(asset.attribute_set)
+        for plan in asset.plans:
+            if plan.monitored_asset:
+                assets.append(plan.monitored_asset)
+                if plan.monitored_asset.attribute_set:
+                    attribute_sets.add(plan.monitored_asset.attribute_set)
+            plans.append(plan)
+            schedulers.add(plan.scheduler)
+            check_types.add(plan.type)
 
         result_types = ResultType.search([])
 
@@ -728,6 +739,7 @@ class Asset:
             model_data=True)
         data['result_types'] = cls.export_objects(result_types, model_data=True)
         data['plans'] = cls.export_objects(plans)
+        data['asset_attribute_sets'] = cls.export_objects(list(attribute_sets))
         data['assets'] = cls.export_objects(assets)
         return data
 
@@ -746,16 +758,19 @@ class Asset:
         # TODO: Result and Check types need to be properly synchronized
         # Now they work only if modules were installed in the same
         # order on both ends.
-        checks = cls.import_objects(data['checks'], Check)
-        cls.import_objects(data['integer_results'], IntegerResult,
+        if not data['checks']:
+            return
+        peer = cls(data['checks'][0]['monitoring_asset']).login
+        checks = cls.import_objects(data['checks'], Check, peer=peer)
+        cls.import_objects(data['integer_results'], IntegerResult, peer=peer,
             mappings={
                 'check': 'monitoring.check',
                 })
-        cls.import_objects(data['float_results'], FloatResult,
+        cls.import_objects(data['float_results'], FloatResult, peer=peer,
             mappings={
                 'check': 'monitoring.check',
                 })
-        cls.import_objects(data['char_results'], CharResult,
+        cls.import_objects(data['char_results'], CharResult, peer=peer,
             mappings={
                 'check': 'monitoring.check',
                 })
@@ -770,6 +785,7 @@ class Asset:
         CharResult = pool.get('monitoring.result.char')
         Plan = pool.get('monitoring.check.plan')
         Scheduler = pool.get('monitoring.scheduler')
+        AssetAttributeSet = pool.get('asset.attribute.set')
         Asset = pool.get('asset')
         Product = pool.get('product.product')
         Template = pool.get('product.template')
@@ -833,6 +849,7 @@ class Asset:
                     ('code', '=', 'monitoring'),
                     ], limit=1)
         asset_product = asset_product[0]
+        cls.import_objects(data['asset_attribute_sets'], AssetAttributeSet)
         cls.import_objects(data['assets'], Asset, overrides={
                 'product': asset_product.id,
                 })

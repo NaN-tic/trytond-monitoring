@@ -160,7 +160,7 @@
             <field name="name">state_indicator_check_plan_list</field>
         </record>
         <record model="ir.action.act_window" id="act_monitoring_state_indicator_check_plan">
-            <field name="name">Monitoring Curent States</field>
+            <field name="name">Monitoring Current States</field>
             <field name="res_model">monitoring.state.indicator-monitoring.check.plan</field>
         </record>
         <record model="ir.action.act_window.view" id="act_monitoring_state_indicator_check_plan_view1">
