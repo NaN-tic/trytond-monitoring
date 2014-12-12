@@ -757,17 +757,16 @@ class Asset:
 
         if not data['checks']:
             return
-        peer = cls(data['checks'][0]['monitoring_asset']).login
-        checks = cls.import_objects(data['checks'], Check, peer=peer)
-        cls.import_objects(data['integer_results'], IntegerResult, peer=peer,
+        checks = cls.import_objects(data['checks'], Check, peer=login)
+        cls.import_objects(data['integer_results'], IntegerResult, peer=login,
             mappings={
                 'check': 'monitoring.check',
                 })
-        cls.import_objects(data['float_results'], FloatResult, peer=peer,
+        cls.import_objects(data['float_results'], FloatResult, peer=login,
             mappings={
                 'check': 'monitoring.check',
                 })
-        cls.import_objects(data['char_results'], CharResult, peer=peer,
+        cls.import_objects(data['char_results'], CharResult, peer=login,
             mappings={
                 'check': 'monitoring.check',
                 })
