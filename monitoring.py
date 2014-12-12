@@ -686,6 +686,12 @@ class Asset:
                         'peer': peer,
                         })
                 continue
+            id = record.get('id'):
+            if id and SynchroMapping.search([
+                        ('remote_id', '=', id),
+                        ('peer', '=', peer),
+                        ]):
+                continue
             to_create.append(Asset.dict_to_object(record, cls, peer=peer,
                     overrides=overrides, mappings=mappings))
             new_records.append(record)
