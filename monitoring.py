@@ -677,13 +677,13 @@ class Asset:
         local_ids = []
         for record in records:
             if record.get('id'):
-                mapping = SynchroMapping.search([
+                maps = SynchroMapping.search([
                         ('remote_id', '=', record['id']),
                         ('peer', '=', peer),
                         ('model', '=', cls.__name__),
                         ])
-                if mapping:
-                    local_ids.append(mapping.local_id)
+                if maps:
+                    local_ids.append(maps[0].local_id)
                     continue
             if '__model_data__' in record:
                 value = record['__model_data__']
@@ -699,8 +699,8 @@ class Asset:
             to_create.append(Asset.dict_to_object(record, cls, peer=peer,
                     overrides=overrides, mappings=mappings))
             new_records.append(record)
-        local_ids += [r.id for r in cls.create([x._save_values for x in to_create])]
-        for local_id, remote in izip(local_ids, new_records):
+        new_ids = [r.id for r in cls.create([x._save_values for x in to_create])]
+        for local_id, remote in izip(new_ids, new_records):
             map_records.append({
                     'local_id': local_id,
                     'remote_id': remote['id'],
@@ -709,7 +709,7 @@ class Asset:
                     })
         if map_records:
             SynchroMapping.create(map_records)
-        return cls.browse(local_ids)
+        return cls.browse(local_ids + new_ids)
 
     @classmethod
     def fetch_remote_assets(cls, login, password):
@@ -720,7 +720,7 @@ class Asset:
         if not asset_id:
             logging.getLogger('monitoring').error('No asset found for login %s' %
                 login)
-            return
+            raise Exception('Incorrect login or password')
         asset = cls(asset_id)
 
         products = []
