@@ -686,9 +686,8 @@ class Asset:
                         'peer': peer,
                         })
                 continue
-            id = record.get('id'):
-            if id and SynchroMapping.search([
-                        ('remote_id', '=', id),
+            if record.get('id') and SynchroMapping.search([
+                        ('remote_id', '=', record['id']),
                         ('peer', '=', peer),
                         ]):
                 continue
