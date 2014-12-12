@@ -795,7 +795,7 @@
             <field name="request_user" ref="res.user_admin"/>
             <field name="user" ref="user_monitoring"/>
             <field name="active" eval="True"/>
-            <field name="interval_number">1</field>
+            <field name="interval_number">15</field>
             <field name="interval_type">minutes</field>
             <field name="number_calls">-1</field>
             <field name="repeat_missed" eval="False"/>
