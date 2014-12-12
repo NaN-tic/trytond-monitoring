@@ -707,7 +707,7 @@ class Asset:
 
         asset_id = cls.get_login(login, password)
         if not asset_id:
-            logger.getLogger('monitoring').error('No asset found for login %s' %
+            logging.getLogger('monitoring').error('No asset found for login %s' %
                 login)
             return
         asset = cls(asset_id)
