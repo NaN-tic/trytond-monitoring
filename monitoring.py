@@ -625,12 +625,12 @@ class Asset:
                 # TODO: Reference fields
                 value = ''
             if name in mappings and value:
-                remote, = SynchroMapping.search([
+                mapping, = SynchroMapping.search([
                         ('local_id', '=', value),
                         ('model', '=', mappings[name]),
                         ('peer', '=', peer),
                         ])
-                value = remote.remote_id
+                value = mapping.remote_id
             res[name] = value
         return res
 
@@ -650,20 +650,18 @@ class Asset:
             overrides = {}
         if mappings is None:
             mappings = {}
-        #obj = {}
         obj = cls()
         for name, value in record.iteritems():
             if name == '__model_data__':
                 continue
             value = overrides.get(name, value)
             if name in mappings and value:
-                local, = SynchroMapping.search([
+                mapping, = SynchroMapping.search([
                         ('remote_id', '=', value),
                         ('model', '=', mappings[name]),
                         ('peer', '=', peer),
                         ])
-                value = local.local_id
-            #obj[name] = value
+                value = mapping.local_id
             setattr(obj, name, value)
         return obj
 
@@ -689,6 +687,7 @@ class Asset:
             if record.get('id') and SynchroMapping.search([
                         ('remote_id', '=', record['id']),
                         ('peer', '=', peer),
+                        ('model', '=', cls.__name__),
                         ]):
                 continue
             to_create.append(Asset.dict_to_object(record, cls, peer=peer,
@@ -702,7 +701,8 @@ class Asset:
                     'model': cls.__name__,
                     'peer': peer,
                     })
-        SynchroMapping.create(map_records)
+        if map_records:
+            SynchroMapping.create(map_records)
         return local_objects
 
     @classmethod
