@@ -450,8 +450,8 @@ class SynchroMapping(ModelSQL):
     def __setup__(cls):
         super(SynchroMapping, cls).__setup__()
         cls._sql_constraints += [
-            ('remote_id_model_uniq', 'UNIQUE(remote_id, model)',
-                'remote_id and model must be unique.')
+            ('remote_id_model_peer_uniq', 'UNIQUE(remote_id, model, peer)',
+                'remote_id, model and peer must be unique.')
             ]
 
     @staticmethod
@@ -674,36 +674,42 @@ class Asset:
         to_create = []
         new_records = []
         map_records = []
+        local_ids = []
         for record in records:
+            if record.get('id'):
+                mapping = SynchroMapping.search([
+                        ('remote_id', '=', record['id']),
+                        ('peer', '=', peer),
+                        ('model', '=', cls.__name__),
+                        ])
+                if mapping:
+                    local_ids.append(mapping.local_id)
+                    continue
             if '__model_data__' in record:
                 value = record['__model_data__']
+                local_id = ModelData.get_id(value[0], value[1])
                 map_records.append({
-                        'local_id': ModelData.get_id(value[0], value[1]),
+                        'local_id': local_id,
                         'remote_id': record['id'],
                         'model': cls.__name__,
                         'peer': peer,
                         })
-                continue
-            if record.get('id') and SynchroMapping.search([
-                        ('remote_id', '=', record['id']),
-                        ('peer', '=', peer),
-                        ('model', '=', cls.__name__),
-                        ]):
+                local_ids.append(local_id)
                 continue
             to_create.append(Asset.dict_to_object(record, cls, peer=peer,
                     overrides=overrides, mappings=mappings))
             new_records.append(record)
-        local_objects = cls.create([x._save_values for x in to_create])
-        for local, remote in izip(local_objects, new_records):
+        local_ids += [r.id for r in cls.create([x._save_values for x in to_create])]
+        for local_id, remote in izip(local_ids, new_records):
             map_records.append({
-                    'local_id': local.id,
+                    'local_id': local_id,
                     'remote_id': remote['id'],
                     'model': cls.__name__,
                     'peer': peer,
                     })
         if map_records:
             SynchroMapping.create(map_records)
-        return local_objects
+        return cls.browse(local_ids)
 
     @classmethod
     def fetch_remote_assets(cls, login, password):
