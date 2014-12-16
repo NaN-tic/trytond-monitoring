@@ -7,7 +7,7 @@ from datetime import datetime
 import random
 import string
 import hashlib
-from itertools import izip, chain
+from itertools import izip, chain, groupby
 from decimal import Decimal
 import logging
 
@@ -292,18 +292,74 @@ class StateIndicatorCheckPlan(ModelSQL, ModelView):
         required=True)
     plan = fields.Many2One('monitoring.check.plan', 'Plan', required=True)
     last_check = fields.Function(fields.Many2One('monitoring.check',
-            'Last Check'), 'get_last_check')
+            'Last Check'), 'get_lasts')
     last_state = fields.Function(fields.Many2One('monitoring.state', 'State'),
-        'get_last_state')
+        'get_lasts')
     last_state_type = fields.Function(fields.Many2One('monitoring.state.type',
-            'State Type'), 'get_last_state_type')
+            'State Type'), 'get_lasts')
     last_state_value = fields.Function(fields.Char('Value'),
-        'get_last_state_value')
+        'get_lasts')
     monitoring_asset = fields.Function(fields.Many2One('asset',
             'Monitoring Asset'), 'get_asset', searcher='search_asset')
     monitored_asset = fields.Function(fields.Many2One('asset',
             'Monitored Asset'), 'get_asset', searcher='search_asset')
-    color = fields.Function(fields.Char('Color'), 'get_color')
+    color = fields.Function(fields.Char('Color'), 'get_lasts')
+
+    @classmethod
+    def get_lasts(cls, records, names):
+        import logging
+        res = {}
+        for name in ('last_state', 'last_check', 'last_state_type',
+                'last_state_value', 'color'):
+            res[name] = dict([(x.id, None) for x in records])
+
+        plan_ids = [x.plan.id for x in records]
+        Check = Pool().get('monitoring.check')
+        State = Pool().get('monitoring.state')
+        Plan = Pool().get('monitoring.check.plan')
+        check_ids = []
+        mapping = {}
+        logging.info("Grouping plans")
+        plan_ids = list(set([x.plan.id for x in records]))
+
+        checks = Check.search([
+                ('plan', 'in', plan_ids),
+                ], order=[('plan', 'ASC'), ('timestamp', 'DESC')])
+        plan_check_map = {}
+        for key, group in groupby(checks, lambda x: x.plan.id):
+            for item in group:
+                plan_check_map[key] = item.id
+                break
+
+        #plan_check_map= {}
+        #for plan in  Plan.browse(plan_ids):
+        #    if plan.checks:
+        #        plan_check_map[plan.id] = plan.checks[0].id
+
+        logging.info("Preparing mapping")
+        for record in records:
+            check_id = plan_check_map.get(record.plan.id)
+            if check_id:
+                mapping[(check_id, record.indicator.id)] = record.id
+                res['last_check'][record.id] = check_id
+                check_ids.append(check_id)
+
+        logging.info("Mapping ready")
+        states = State.search([
+                ('check', 'in', check_ids),
+                ])
+        logging.info("Got states")
+        for state in states:
+            key = (state.check.id, state.indicator.id)
+            if key in mapping:
+                res['last_state'][mapping[key]] = state.id
+                res['last_state_type'][mapping[key]] = state.state.id
+                res['last_state_value'][mapping[key]] = state.value
+                res['color'][mapping[key]] = (state.state.color if state.state
+                    else 'black')
+        logging.info("GOt it")
+        return res
+
 
     def get_last_check(self, name):
         if not self.plan.checks:
