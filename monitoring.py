@@ -781,8 +781,8 @@ class Asset:
 
         products = []
 
-        assets = []
-        assets.append(asset)
+        assets = set()
+        assets.add(asset)
         plans = []
         schedulers = set()
         check_types = set()
@@ -791,7 +791,7 @@ class Asset:
             attribute_sets.add(asset.attribute_set)
         for plan in asset.plans:
             if plan.monitored_asset:
-                assets.append(plan.monitored_asset)
+                assets.add(plan.monitored_asset)
                 if plan.monitored_asset.attribute_set:
                     attribute_sets.add(plan.monitored_asset.attribute_set)
             plans.append(plan)
@@ -807,7 +807,7 @@ class Asset:
         data['result_types'] = cls.export_objects(result_types, model_data=True)
         data['plans'] = cls.export_objects(plans)
         data['asset_attribute_sets'] = cls.export_objects(list(attribute_sets))
-        data['assets'] = cls.export_objects(assets)
+        data['assets'] = cls.export_objects(list(assets))
         return data
 
     @classmethod
