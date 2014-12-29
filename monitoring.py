@@ -671,10 +671,10 @@ class Asset:
                 value = (records[0].module, records[0].fs_id)
             res['__model_data__'] = value
         for name, field in obj._fields.iteritems():
-            value = getattr(obj, name)
             if isinstance(field, (fields.Function, fields.One2Many,
                         fields.Many2Many)):
                 continue
+            value = getattr(obj, name)
             if isinstance(field, fields.Many2One) and value:
                 value = value.id
             elif isinstance(field, fields.Reference) and value:
