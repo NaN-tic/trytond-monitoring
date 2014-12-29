@@ -769,6 +769,7 @@ class Asset:
 
     @classmethod
     def fetch_remote_assets(cls, login, password):
+        logging.info('fetch_remote_assets: %s' % login)
         AssetRelationAll = Pool().get('asset.relation.all')
         ResultType = Pool().get('monitoring.result.type')
 
@@ -808,10 +809,12 @@ class Asset:
         data['plans'] = cls.export_objects(plans)
         data['asset_attribute_sets'] = cls.export_objects(list(attribute_sets))
         data['assets'] = cls.export_objects(list(assets))
+        logging.info('fetch_remote_assets: %s finished' % login)
         return data
 
     @classmethod
     def update_remote_checks(cls, login, password, data):
+        logging.info('update_remote_checks: %s' % login)
         if not cls.get_login(login, password):
             logging.getLogger('monitoring').error('No asset found for login %s' %
                 login)
@@ -840,6 +843,7 @@ class Asset:
                 'check': 'monitoring.check',
                 })
         CheckPlan.create_indicators(Check.browse([x.id for x in checks]))
+        logging.info('update_remote_checks: %s finished' % login)
 
     @classmethod
     def sync(cls):
