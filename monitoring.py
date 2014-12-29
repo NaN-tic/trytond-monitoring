@@ -813,7 +813,9 @@ class Asset:
     @classmethod
     def update_remote_checks(cls, login, password, data):
         if not cls.get_login(login, password):
-            return
+            logging.getLogger('monitoring').error('No asset found for login %s' %
+                login)
+            raise Exception('Incorrect login or password')
 
         pool = Pool()
         Check = pool.get('monitoring.check')
