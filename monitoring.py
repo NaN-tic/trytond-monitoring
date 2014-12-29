@@ -360,38 +360,6 @@ class StateIndicatorCheckPlan(ModelSQL, ModelView):
         logging.info("GOt it")
         return res
 
-
-    def get_last_check(self, name):
-        if not self.plan.checks:
-            return None
-        return self.plan.checks[0].id
-
-    def get_last_state(self, name):
-        check = self.last_check
-        if not check:
-            return
-        for state in check.states:
-            if state.indicator == self.indicator:
-                return state.id
-
-    def get_last_state_type(self, name):
-        state = self.last_state
-        if not state:
-            return
-        return state.state.id
-
-    def get_last_state_value(self, name):
-        state = self.last_state
-        if not state:
-            return
-        return self.last_state.value
-
-    def get_color(self, name):
-        state = self.last_state_type
-        if not state:
-            return
-        return state.color
-
     def get_asset(self, name):
         asset = getattr(self.plan, name)
         if asset:
