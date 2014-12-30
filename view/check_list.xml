@@ -4,5 +4,6 @@
 <tree string="Monitoring Check">
     <field name="timestamp"/>
     <field name="monitoring_asset"/>
+    <field name="monitored_asset"/>
     <field name="type"/>
 </tree>
