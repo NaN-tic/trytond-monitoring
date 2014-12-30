@@ -5,6 +5,7 @@
     <field name="monitoring_asset"/>
     <field name="type"/>
     <field name="scheduler"/>
+    <field name="monitored_asset"/>
     <button name="check" string="Check Now"/>
     <field name="active" tree_invisible="1"/>
 </tree>
