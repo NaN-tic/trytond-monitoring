@@ -10,4 +10,9 @@
     <field name="value"/>
     <label name="uom"/>
     <field name="uom"/>
+    <label name="label"/>
+    <field name="label"/>
+    <newline/>
+    <label name="payload"/>
+    <field name="payload" colspan="5"/>
 </form>

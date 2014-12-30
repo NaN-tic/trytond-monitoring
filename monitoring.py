@@ -147,7 +147,7 @@ class CheckPlan(ModelSQL, ModelView):
         return True
 
     @staticmethod
-    def get_indicators(plan, type_, value):
+    def get_indicators(plan, type_, value, label, payload):
         states_to_create = []
         for indicator in plan.indicators:
             if indicator.result_type != type_:
@@ -157,6 +157,8 @@ class CheckPlan(ModelSQL, ModelView):
                 #ast.literal_eval(indicator.expression)
                 if safe_eval(line.expression, {
                             'value': value,
+                            'label': label,
+                            'payload': payload,
                             }):
                     state_type = line.state_type
                     break
@@ -166,6 +168,8 @@ class CheckPlan(ModelSQL, ModelView):
                     'indicator': indicator.id,
                     'state': state_type.id,
                     'value': unicode(value),
+                    'label': label,
+                    'payload': payload,
                     })
         return states_to_create
 
@@ -177,7 +181,7 @@ class CheckPlan(ModelSQL, ModelView):
             for result in chain(check.integer_results, check.float_results,
                     check.char_results):
                 vals = cls.get_indicators(check.plan, result.type,
-                    result.value)
+                    result.value, result.label, result.payload)
                 for state in vals:
                     state['check'] = check.id
                 to_create += vals
@@ -206,12 +210,16 @@ class CheckPlan(ModelSQL, ModelView):
                     continue
                 t = t[0]
                 value = None
+                label = result.get('label')
+                payload = result.get('payload')
                 if t.type == 'integer':
                     value = result['integer_value']
                     integer_to_create.append({
                             'type': t.id,
                             'value': result['integer_value'],
                             'uom': result.get('uom', t.uom.id),
+                            'label': label,
+                            'payload': payload,
                             })
                 elif t.type == 'float':
                     value = result['float_value']
@@ -219,19 +227,24 @@ class CheckPlan(ModelSQL, ModelView):
                             'type': t.id,
                             'value': result['float_value'],
                             'uom': result.get('uom', t.uom.id),
+                            'label': label,
+                            'payload': payload,
                             })
                 elif t.type == 'char':
                     value = result['char_value']
                     char_to_create.append({
                             'type': t.id,
                             'value': result['char_value'],
+                            'label': label,
+                            'payload': payload,
                             })
                 else:
                     sys.stderr.write('Unknown type "%s" for result "%s".\n'
                         % (t.type, result['result']))
                     continue
 
-                states_to_create = cls.get_indicators(plan, t, value)
+                states_to_create = cls.get_indicators(plan, t, value, label,
+                    payload)
 
             to_create.append({
                     'timestamp': datetime.now(),
@@ -409,6 +422,8 @@ class State(ModelSQL, ModelView):
     state = fields.Many2One('monitoring.state.type', 'State', required=True)
     color = fields.Function(fields.Char('Color'), 'get_color')
     value = fields.Char('Value')
+    label = fields.Char('Label')
+    payload = fields.Text('Payload')
 
     @classmethod
     def __setup__(cls):
@@ -434,6 +449,8 @@ class ResultInteger(ModelSQL, ModelView):
     type = fields.Many2One('monitoring.result.type', 'Type', required=True)
     value = fields.Integer('Value')
     uom = fields.Many2One('product.uom', 'UoM', required=True)
+    label = fields.Char('Label')
+    payload = fields.Text('Payload')
 
 
 class ResultFloat(ModelSQL, ModelView):
@@ -444,6 +461,8 @@ class ResultFloat(ModelSQL, ModelView):
     type = fields.Many2One('monitoring.result.type', 'Type', required=True)
     value = fields.Float('Value')
     uom = fields.Many2One('product.uom', 'UoM', required=True)
+    label = fields.Char('Label')
+    payload = fields.Text('Payload')
 
 
 class ResultChar(ModelSQL, ModelView):
@@ -453,6 +472,8 @@ class ResultChar(ModelSQL, ModelView):
         ondelete='CASCADE')
     type = fields.Many2One('monitoring.result.type', 'Type', required=True)
     value = fields.Char('Value')
+    label = fields.Char('Label')
+    payload = fields.Text('Payload')
 
 
 class AssetPartyNotification(ModelSQL):

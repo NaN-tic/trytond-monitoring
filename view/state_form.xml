@@ -10,4 +10,8 @@
     <field name="state"/>
     <label name="value"/>
     <field name="value"/>
+    <label name="label"/>
+    <field name="label"/>
+    <label name="payload"/>
+    <field name="payload" colspan="3"/>
 </form>

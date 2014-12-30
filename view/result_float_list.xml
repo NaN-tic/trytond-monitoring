@@ -6,4 +6,6 @@
     <field name="type"/>
     <field name="value"/>
     <field name="uom"/>
+    <field name="label"/>
+    <field name="payload"/>
 </tree>

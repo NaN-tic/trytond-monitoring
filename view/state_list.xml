@@ -6,5 +6,7 @@
     <field name="indicator"/>
     <field name="state"/>
     <field name="value"/>
+    <field name="label"/>
+    <field name="payload"/>
     <field name="color" tree_invisible="1"/>
 </tree>

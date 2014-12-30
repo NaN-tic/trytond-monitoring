@@ -5,4 +5,6 @@
     <field name="check"/>
     <field name="type"/>
     <field name="value"/>
+    <field name="label"/>
+    <field name="payload"/>
 </tree>
