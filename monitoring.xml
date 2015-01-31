@@ -735,21 +735,21 @@
         <record model="product.uom" id="uom_rate">
             <field name="name">Rate</field>
             <field name="symbol"> </field>
-            <field name="category" ref="uom_cat_data"/>
+            <field name="category" ref="uom_cat_ratio"/>
             <field name="factor" eval="1"/>
             <field name="rate" eval="1"/>
         </record>
         <record model="product.uom" id="uom_percent">
             <field name="name">Percent</field>
             <field name="symbol">%</field>
-            <field name="category" ref="uom_cat_data"/>
+            <field name="category" ref="uom_cat_ratio"/>
             <field name="factor" eval="100"/>
             <field name="rate" eval="0.01"/>
         </record>
         <record model="product.uom" id="uom_permille">
             <field name="name">Per Mille</field>
             <field name="symbol">‰</field>
-            <field name="category" ref="uom_cat_data"/>
+            <field name="category" ref="uom_cat_ratio"/>
             <field name="factor" eval="1000"/>
             <field name="rate" eval="0.001"/>
         </record>
