@@ -51,8 +51,8 @@ class ResultType(ModelSQL, ModelView):
             ('char', 'Char'),
             ], 'Type', required=True)
     uom = fields.Many2One('product.uom', 'UoM', states={
-            'required': Eval('type').in_(['integer', 'float']),
-            'invisible': ~Eval('type').in_(['integer', 'float']),
+            'required': Eval('type') == 'float',
+            'invisible': Eval('type') != 'float',
             })
 
 
@@ -217,7 +217,6 @@ class CheckPlan(ModelSQL, ModelView):
                     integer_to_create.append({
                             'type': t.id,
                             'value': result['integer_value'],
-                            'uom': result.get('uom', t.uom.id),
                             'label': label,
                             'payload': payload,
                             })
@@ -448,7 +447,6 @@ class ResultInteger(ModelSQL, ModelView):
         ondelete='CASCADE')
     type = fields.Many2One('monitoring.result.type', 'Type', required=True)
     value = fields.Integer('Value')
-    uom = fields.Many2One('product.uom', 'UoM', required=True)
     label = fields.Char('Label')
     payload = fields.Text('Payload')
 

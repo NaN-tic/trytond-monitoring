@@ -8,8 +8,6 @@
     <field name="type"/>
     <label name="value"/>
     <field name="value"/>
-    <label name="uom"/>
-    <field name="uom"/>
     <label name="label"/>
     <field name="label"/>
     <newline/>
