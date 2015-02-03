@@ -310,7 +310,8 @@ class StateIndicatorCheckPlan(ModelSQL, ModelView):
     __name__ = 'monitoring.state.indicator-monitoring.check.plan'
     indicator = fields.Many2One('monitoring.state.indicator', 'Indicator',
         required=True)
-    plan = fields.Many2One('monitoring.check.plan', 'Plan', required=True)
+    plan = fields.Many2One('monitoring.check.plan', 'Plan', required=True,
+        ondelete='CASCADE')
     last_check = fields.Function(fields.Many2One('monitoring.check',
             'Last Check'), 'get_lasts')
     last_state = fields.Function(fields.Many2One('monitoring.state', 'State'),
