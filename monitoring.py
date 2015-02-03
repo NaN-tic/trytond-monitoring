@@ -145,6 +145,14 @@ class CheckPlan(ModelSQL, ModelView):
     def default_active():
         return True
 
+    @classmethod
+    def copy(cls, plans, default=None):
+        if default is None:
+            default = {}
+        if 'checks' not in default:
+            default['checks'] = None
+        return super(CheckPlan, cls).copy(plans, default)
+
     @staticmethod
     def get_indicators(plan, type_, value, label, payload):
         states_to_create = []
@@ -518,6 +526,14 @@ class Asset:
         cls.__rpc__.update({
                 'server_sync': RPC(readonly=False),
                 })
+
+    @classmethod
+    def copy(cls, assets, default=None):
+        if default is None:
+            default = {}
+        if 'checks' not in default:
+            default['checks'] = None
+        return super(Asset, cls).copy(assets, default)
 
     def get_attribute(self, name, browsed=None):
         """
