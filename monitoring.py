@@ -1,6 +1,7 @@
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
 import sys
+import ssl
 import xmlrpclib
 from datetime import datetime
 import random
@@ -913,7 +914,14 @@ class Asset:
         uri = config.get('monitoring', 'uri')
         username = config.get('monitoring', 'username')
         password = config.get('monitoring', 'password')
-        server = xmlrpclib.ServerProxy(uri, allow_none=True)
+        ssl_context = ssl.create_default_context()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
+        try:
+            server = xmlrpclib.ServerProxy(uri, allow_none=True,
+                context=ssl_context)
+        except:
+            server = xmlrpclib.ServerProxy(uri, allow_none=True)
         context = server.model.res.user.get_preferences(True, {})
 
         remote_clear = True
