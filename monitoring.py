@@ -914,10 +914,10 @@ class Asset:
         uri = config.get('monitoring', 'uri')
         username = config.get('monitoring', 'username')
         password = config.get('monitoring', 'password')
-        ssl_context = ssl.create_default_context()
-        ssl_context.check_hostname = False
-        ssl_context.verify_mode = ssl.CERT_NONE
         try:
+            ssl_context = ssl.create_default_context()
+            ssl_context.check_hostname = False
+            ssl_context.verify_mode = ssl.CERT_NONE
             server = xmlrpclib.ServerProxy(uri, allow_none=True,
                 context=ssl_context)
         except:
