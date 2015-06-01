@@ -167,6 +167,7 @@ class CheckPlan(ModelSQL, ModelView):
                             'value': value,
                             'label': label,
                             'payload': payload,
+                            'abs': abs,
                             }):
                     state_type = line.state_type
                     break
