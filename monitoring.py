@@ -685,7 +685,7 @@ class Asset:
                         ('local_id', '=', value),
                         ('model', '=', mappings[name]),
                         ('peer', '=', peer),
-                        ])
+                        ], limit=1)
                 assert db_mappings, ('No mappings found with local_id=%s, '
                     'model=%s, peer=%s' % (value, mappings[name], peer))
                 value = db_mappings[0].remote_id
@@ -718,7 +718,7 @@ class Asset:
                         ('remote_id', '=', value),
                         ('model', '=', mappings[name]),
                         ('peer', '=', peer),
-                        ])
+                        ], limit=1)
                 assert db_mappings, ('No mappings found with remote_id=%s, '
                     'model=%s, peer=%s' % (value, mappings[name], peer))
                 value = db_mappings[0].local_id
@@ -741,7 +741,7 @@ class Asset:
                         ('remote_id', '=', record['id']),
                         ('peer', '=', peer),
                         ('model', '=', cls.__name__),
-                        ])
+                        ], limit=1)
                 if maps:
                     local_ids.append(maps[0].local_id)
                     continue
