@@ -208,6 +208,7 @@ class CheckPlan(ModelSQL, ModelView):
             integer_to_create = []
             float_to_create = []
             char_to_create = []
+            states_to_create = []
             logging.info('Checking %s' % plan.type.internal_name)
             res = getattr(plan, plan.type.internal_name)()
             for result in res:
