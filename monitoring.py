@@ -2,6 +2,7 @@
 # copyright notices and license terms.
 import sys
 import ssl
+import sql
 import xmlrpclib
 from datetime import datetime
 import random
@@ -336,47 +337,39 @@ class StateIndicatorCheckPlan(ModelSQL, ModelView):
                 'last_state_value', 'color'):
             res[name] = dict([(x.id, None) for x in records])
 
-        plan_ids = [x.plan.id for x in records]
+
         Check = Pool().get('monitoring.check')
         State = Pool().get('monitoring.state')
-        Plan = Pool().get('monitoring.check.plan')
-        check_ids = []
-        mapping = {}
-        plan_ids = list(set([x.plan.id for x in records]))
+        check = Check.__table__()
+        state = State.__table__()
+        table = cls.__table__()
 
-        checks = Check.search([
-                ('plan', 'in', plan_ids),
-                ], order=[('plan', 'ASC'), ('timestamp', 'DESC')])
-        plan_check_map = {}
-        for key, group in groupby(checks, lambda x: x.plan.id):
-            for item in group:
-                plan_check_map[key] = item.id
-                break
+        ids = [x.id for x in records]
+        joined = state.join(check,
+            condition=(state.check == check.id)
+            ).select(
+                state.indicator,
+                check.plan,
+                sql.aggregate.Max(state.id).as_('state'),
+                group_by=(state.indicator, check.plan))
+        query = table.join(joined,
+            condition=((table.indicator == joined.indicator)
+                & (table.plan == joined.plan))).select(
+                    joined.state,
+                    table.id,
+                    where=(table.id.in_(ids)))
 
-        #plan_check_map= {}
-        #for plan in  Plan.browse(plan_ids):
-        #    if plan.checks:
-        #        plan_check_map[plan.id] = plan.checks[0].id
-
-        logging.info("Preparing mapping")
-        for record in records:
-            check_id = plan_check_map.get(record.plan.id)
-            if check_id:
-                mapping[(check_id, record.indicator.id)] = record.id
-                res['last_check'][record.id] = check_id
-                check_ids.append(check_id)
-
-        states = State.search([
-                ('check', 'in', check_ids),
-                ])
-        for state in states:
-            key = (state.check.id, state.indicator.id)
-            if key in mapping:
-                res['last_state'][mapping[key]] = state.id
-                res['last_state_type'][mapping[key]] = state.state.id
-                res['last_state_value'][mapping[key]] = state.value
-                res['color'][mapping[key]] = (state.state.color if state.state
-                    else 'black')
+        cursor = Transaction().cursor
+        cursor.execute(*query)
+        records = cursor.fetchall()
+        mapping = dict(records)
+        for state in State.browse([x[0] for x in records]):
+            res['last_state'][mapping[state.id]] = state.id
+            res['last_check'][mapping[state.id]] = state.check.id
+            res['last_state_type'][mapping[state.id]] = state.state.id
+            res['last_state_value'][mapping[state.id]] = state.value
+            res['color'][mapping[state.id]] = (state.state.color if state.state
+                else 'black')
         return res
 
     def get_asset(self, name):
