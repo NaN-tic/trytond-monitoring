@@ -233,7 +233,7 @@
         <!-- monitoring.state.type-party.party -->
         <record model="ir.model.access" id="access_monitoring_state_type_party_party">
             <field name="model" search="[('model', '=', 'monitoring.state.type-party.party')]"/>
-            <field name="perm_read" eval="True"/>        monitoring.state.type-party.party
+            <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="False"/>
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
@@ -559,6 +559,13 @@
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="ir.model.access" id="access_asset_party_notification_default">
+            <field name="model" search="[('model', '=', 'asset-party.party-notification')]"/>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
 
         <record model="ir.model.access" id="access_asset_party_notification">
             <field name="model" search="[('model', '=', 'asset-party.party-notification')]"/>
@@ -600,7 +607,8 @@
         <record model="ir.action.act_window" id="act_asset_states">
             <field name="name">States</field>
             <field name="res_model">monitoring.state</field>
-            <field name="domain">[('monitoring_asset', 'in', Eval('active_ids'))]</field>
+            <field name="domain" pyson="1"
+                eval="[('monitoring_asset', 'in', Eval('active_ids'))]"/>
         </record>
         <record model="ir.action.keyword" id="act_asset_states_keyword1">
             <field name="keyword">form_relate</field>
@@ -611,7 +619,8 @@
         <record model="ir.action.act_window" id="act_plan_checks">
             <field name="name">Checks</field>
             <field name="res_model">monitoring.check</field>
-            <field name="domain">[('plan', 'in', Eval('active_ids'))]</field>
+            <field name="domain" domain="[('plan', 'in', Eval('active_ids'))]"
+                pyson="1"/>
         </record>
         <record model="ir.action.keyword" id="act_plan_checks_keyword1">
             <field name="keyword">form_relate</field>
@@ -622,7 +631,8 @@
         <record model="ir.action.act_window" id="act_asset_checks">
             <field name="name">Checks</field>
             <field name="res_model">monitoring.check</field>
-            <field name="domain">[('monitoring_asset', 'in', Eval('active_ids'))]</field>
+            <field name="domain" pyson="1"
+                eval="[('monitoring_asset', 'in', Eval('active_ids'))]" />
         </record>
         <record model="ir.action.keyword" id="act_asset_checks_keyword1">
             <field name="keyword">form_relate</field>
@@ -807,19 +817,15 @@
         <!-- State Types -->
         <record model="monitoring.state.type" id="state_type_ok">
             <field name="name">Ok</field>
-            <field name="color">green</field>
         </record>
         <record model="monitoring.state.type" id="state_type_error">
             <field name="name">Error</field>
-            <field name="color">red</field>
         </record>
         <record model="monitoring.state.type" id="state_type_warning">
             <field name="name">Warning</field>
-            <field name="color">orange</field>
         </record>
         <record model="monitoring.state.type" id="state_type_exception">
             <field name="name">Exception</field>
-            <field name="color">purple</field>
         </record>
     </data>
 </tryton>

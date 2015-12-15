@@ -4,10 +4,10 @@
 <form string="Monitoring Scheduler">
     <label name="name"/>
     <field name="name"/>
-    <label name="normal_check_interval"/>
-    <field name="normal_check_interval" widget="float_time"/>
+    <label name="normal_check"/>
+    <field name="normal_check"/>
     <label name="retries"/>
     <field name="retries"/>
-    <label name="retry_check_interval"/>
-    <field name="retry_check_interval" widget="float_time"/>
+    <label name="retry_check"/>
+    <field name="retry_check"/>
 </form>

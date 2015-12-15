@@ -3,12 +3,13 @@
 import sys
 import ssl
 import sql
+from sql import Column
 import xmlrpclib
 from datetime import datetime
 import random
 import string
 import hashlib
-from itertools import izip, chain, groupby
+from itertools import izip, chain
 from decimal import Decimal
 import logging
 
@@ -17,13 +18,13 @@ try:
 except ImportError:
     bcrypt = None
 
-from trytond.tools import safe_eval
 from trytond.model import ModelSQL, ModelView, fields
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.config import config
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
+from trytond import backend
 
 
 __all__ = ['CheckType', 'ResultType', 'StateType', 'StateIndicator',
@@ -61,7 +62,6 @@ class StateType(ModelSQL, ModelView):
     'Monitoring State Value'
     __name__ = 'monitoring.state.type'
     name = fields.Char('Name', translate=True, required=True)
-    color = fields.Char('Color')
 
 
 class StateIndicator(ModelSQL, ModelView):
@@ -104,9 +104,30 @@ class Scheduler(ModelSQL, ModelView):
     # It might make sense to create a parent and inherit values from the
     # parent similar to Nagios behaviour.
     name = fields.Char('Name', required=True, translate=True)
-    normal_check_interval = fields.Float('Normal Check Interval', required=True)
+    normal_check = fields.TimeDelta('Normal Check Interval', required=True)
     retries = fields.Integer('Retries', required=True)
-    retry_check_interval = fields.Float('Retry Check Interval', required=True)
+    retry_check = fields.TimeDelta('Retry Check Interval', required=True)
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        table = TableHandler(cursor, cls, module_name)
+        sql_table = cls.__table__()
+        super(Scheduler, cls).__register__(module_name)
+
+        for field in ('normal_check', 'retry_check'):
+            old_field = '%s_interval'
+            if table.column_exist(old_field):
+                cursor.execute(*sql_table.select(
+                        sql_table.id, Column(sql_table, old_field)))
+                for id_, hours in cursor.fetchall():
+                    new_value = datetime.timedelta(hours=hours)
+                    cursor.execute(*sql_table.update(
+                            [Column(sql_table, field)],
+                            [new_value],
+                            where=sql_table.id == id_))
+                table.drop_column(old_field)
 
 
 # TODO: We should probably create a scheduler queue
@@ -164,7 +185,7 @@ class CheckPlan(ModelSQL, ModelView):
             state_type = None
             for line in indicator.lines:
                 #ast.literal_eval(indicator.expression)
-                if safe_eval(line.expression, {
+                if eval(line.expression, {
                             'value': value,
                             'label': label,
                             'payload': payload,
@@ -288,7 +309,7 @@ class CheckPlan(ModelSQL, ModelView):
             last_check = checks[0]
 
             delta = datetime.now() - last_check.timestamp
-            if (delta.seconds / 3600.0) >= plan.scheduler.normal_check_interval:
+            if delta >= plan.scheduler.normal_check:
                 to_check.append(plan)
 
         cls.check(cls.browse([x.id for x in to_check]))
@@ -328,13 +349,12 @@ class StateIndicatorCheckPlan(ModelSQL, ModelView):
             'Monitoring Asset'), 'get_asset', searcher='search_asset')
     monitored_asset = fields.Function(fields.Many2One('asset',
             'Monitored Asset'), 'get_asset', searcher='search_asset')
-    color = fields.Function(fields.Char('Color'), 'get_lasts')
 
     @classmethod
     def get_lasts(cls, records, names):
         res = {}
         for name in ('last_state', 'last_check', 'last_state_type',
-                'last_state_value', 'color'):
+                'last_state_value'):
             res[name] = dict([(x.id, None) for x in records])
 
 
@@ -368,8 +388,6 @@ class StateIndicatorCheckPlan(ModelSQL, ModelView):
             res['last_check'][mapping[state.id]] = state.check.id
             res['last_state_type'][mapping[state.id]] = state.state.id
             res['last_state_value'][mapping[state.id]] = state.value
-            res['color'][mapping[state.id]] = (state.state.color if state.state
-                else 'black')
         return res
 
     def get_asset(self, name):
@@ -419,7 +437,6 @@ class State(ModelSQL, ModelView):
     monitored_asset = fields.Function(fields.Many2One('asset',
             'Monitored Asset'), 'get_asset', searcher='search_asset')
     state = fields.Many2One('monitoring.state.type', 'State', required=True)
-    color = fields.Function(fields.Char('Color'), 'get_color')
     value = fields.Char('Value')
     label = fields.Char('Label')
     payload = fields.Text('Payload')
@@ -435,9 +452,6 @@ class State(ModelSQL, ModelView):
     @classmethod
     def search_asset(cls, name, clause):
         return [('check.%s' % name,) + tuple(clause[1:])]
-
-    def get_color(self, name):
-        return self.state.color if self.state else 'black'
 
 
 class ResultInteger(ModelSQL, ModelView):
