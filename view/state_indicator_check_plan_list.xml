@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- The COPYRIGHT file at the top level of this repository contains the full
      copyright notices and license terms. -->
-<tree string="Current State" colors="Eval('color')">
+<tree string="Current State">
     <field name="plan"/>
     <field name="monitoring_asset"/>
     <field name="monitored_asset"/>
@@ -9,5 +9,4 @@
     <field name="last_check"/>
     <field name="last_state_type"/>
     <field name="last_state_value"/>
-    <field name="color" tree_invisible="1"/>
 </tree>

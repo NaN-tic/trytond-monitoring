@@ -3,7 +3,7 @@
      copyright notices and license terms. -->
 <tree string="Monitoring Scheduler">
     <field name="name"/>
-    <field name="normal_check_interval" widget="float_time"/>
+    <field name="normal_check"/>
     <field name="retries"/>
-    <field name="retry_check_interval" widget="float_time"/>
+    <field name="retry_check"/>
 </tree>
