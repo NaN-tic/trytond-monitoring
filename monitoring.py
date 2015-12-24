@@ -5,7 +5,7 @@ import ssl
 import sql
 from sql import Column
 import xmlrpclib
-from datetime import datetime
+from datetime import datetime, timedelta
 import random
 import string
 import hashlib
@@ -117,12 +117,12 @@ class Scheduler(ModelSQL, ModelView):
         super(Scheduler, cls).__register__(module_name)
 
         for field in ('normal_check', 'retry_check'):
-            old_field = '%s_interval'
+            old_field = '%s_interval' % field
             if table.column_exist(old_field):
                 cursor.execute(*sql_table.select(
                         sql_table.id, Column(sql_table, old_field)))
                 for id_, hours in cursor.fetchall():
-                    new_value = datetime.timedelta(hours=hours)
+                    new_value = timedelta(hours=hours)
                     cursor.execute(*sql_table.update(
                             [Column(sql_table, field)],
                             [new_value],
