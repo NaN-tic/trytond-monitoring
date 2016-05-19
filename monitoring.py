@@ -111,8 +111,8 @@ class Scheduler(ModelSQL, ModelView):
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
-        cursor = Transaction().cursor
-        table = TableHandler(cursor, cls, module_name)
+        cursor = Transaction().connection.cursor()
+        table = TableHandler(cls, module_name)
         sql_table = cls.__table__()
         super(Scheduler, cls).__register__(module_name)
 
@@ -298,7 +298,7 @@ class CheckPlan(ModelSQL, ModelView):
         Check = Pool().get('monitoring.check')
         plans = cls.search([])
         to_check = []
-        Transaction().cursor.lock(cls._table)
+        Transaction().connection.cursor().lock(cls._table)
         for plan in plans:
             checks = Check.search([
                     ('plan', '=', plan.id),
@@ -379,7 +379,7 @@ class StateIndicatorCheckPlan(ModelSQL, ModelView):
                     table.id,
                     where=(table.id.in_(ids)))
 
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         cursor.execute(*query)
         records = cursor.fetchall()
         mapping = dict(records)
@@ -589,7 +589,7 @@ class Asset:
 
     @classmethod
     def _get_login(cls, login):
-        cursor = Transaction().cursor
+        cursor = Transaction().connection.cursor()
         table = cls.__table__()
         cursor.execute(*table.select(table.id, table.password_hash,
                 where=(table.login == login) & table.active))
@@ -894,7 +894,7 @@ class Asset:
         ResultType = pool.get('monitoring.result.type')
         ProductUom = pool.get('product.uom')
 
-        Transaction().cursor.lock(Plan._table)
+        Transaction().connection.cursor().lock(Plan._table)
         data = {}
 
         checks = Check.search([])
