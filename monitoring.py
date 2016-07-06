@@ -18,7 +18,7 @@ try:
 except ImportError:
     bcrypt = None
 
-from trytond.model import ModelSQL, ModelView, fields
+from trytond.model import ModelSQL, ModelView, fields, Unique
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.config import config
@@ -506,8 +506,9 @@ class SynchroMapping(ModelSQL):
     @classmethod
     def __setup__(cls):
         super(SynchroMapping, cls).__setup__()
+        t = cls.__table__()
         cls._sql_constraints += [
-            ('remote_id_model_peer_uniq', 'UNIQUE(remote_id, model, peer)',
+            ('remote_id_model_peer_uniq', Unique(t, t.remote_id, t.model, t.peer)
                 'remote_id, model and peer must be unique.')
             ]
 
