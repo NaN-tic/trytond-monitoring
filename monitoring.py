@@ -508,7 +508,8 @@ class SynchroMapping(ModelSQL):
         super(SynchroMapping, cls).__setup__()
         t = cls.__table__()
         cls._sql_constraints += [
-            ('remote_id_model_peer_uniq', Unique(t, t.remote_id, t.model, t.peer)
+            ('remote_id_model_peer_uniq',
+                Unique(t, t.remote_id, t.model, t.peer),
                 'remote_id, model and peer must be unique.')
             ]
 
