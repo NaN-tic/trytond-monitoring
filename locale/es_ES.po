@@ -1,0 +1,1127 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:synchro.mapping:"
+msgid "remote_id, model and peer must be unique."
+msgstr "remote_id, model and peer deben ser únicos."
+
+msgctxt "field:asset,checks:"
+msgid "Checks"
+msgstr "Checks"
+
+msgctxt "field:asset,login:"
+msgid "Login"
+msgstr "Nombre usuario"
+
+msgctxt "field:asset,notification_parties:"
+msgid "Notification Parties"
+msgstr Notification Parties""
+
+msgctxt "field:asset,password:"
+msgid "Password"
+msgstr "Contraseña"
+
+msgctxt "field:asset,password_hash:"
+msgid "Password Hash"
+msgstr "Hash de la contraseña"
+
+msgctxt "field:asset,plans:"
+msgid "Check Plans"
+msgstr "Check Plans"
+
+msgctxt "field:asset,states:"
+msgid "States"
+msgstr "States"
+
+msgctxt "field:asset-party.party-notification,asset:"
+msgid "Asset"
+msgstr "Activos"
+
+msgctxt "field:asset-party.party-notification,create_date:"
+msgid "Create Date"
+msgstr "Fecha creación"
+
+msgctxt "field:asset-party.party-notification,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:asset-party.party-notification,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:asset-party.party-notification,party:"
+msgid "Party"
+msgstr "Tercero"
+
+msgctxt "field:asset-party.party-notification,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:asset-party.party-notification,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:asset-party.party-notification,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:asset.relation.type,search_attributes:"
+msgid "Search Attributes"
+msgstr "Search Attributes"
+
+msgctxt "field:monitoring.check,char_results:"
+msgid "Char Results"
+msgstr "Char Results"
+
+msgctxt "field:monitoring.check,create_date:"
+msgid "Create Date"
+msgstr "Fecha creación"
+
+msgctxt "field:monitoring.check,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:monitoring.check,float_results:"
+msgid "Float Results"
+msgstr "Float Results"
+
+msgctxt "field:monitoring.check,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:monitoring.check,integer_results:"
+msgid "Integer Results"
+msgstr ""
+
+msgctxt "field:monitoring.check,monitored_asset:"
+msgid "Monitored Asset"
+msgstr "Monitored Asset"
+
+msgctxt "field:monitoring.check,monitoring_asset:"
+msgid "Monitoring Asset"
+msgstr "Monitoring Asset"
+
+msgctxt "field:monitoring.check,plan:"
+msgid "Plan"
+msgstr "Planificación"
+
+msgctxt "field:monitoring.check,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:monitoring.check,states:"
+msgid "States"
+msgstr "States"
+
+msgctxt "field:monitoring.check,timestamp:"
+msgid "Timestamp"
+msgstr "Fecha-hora"
+
+msgctxt "field:monitoring.check,type:"
+msgid "Type"
+msgstr "Tipo"
+
+msgctxt "field:monitoring.check,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:monitoring.check,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:monitoring.check.plan,active:"
+msgid "Active"
+msgstr "Activo"
+
+msgctxt "field:monitoring.check.plan,attribute_set:"
+msgid "Set"
+msgstr "Establecer"
+
+msgctxt "field:monitoring.check.plan,attributes:"
+msgid "Attributes"
+msgstr "Atributos"
+
+msgctxt "field:monitoring.check.plan,checks:"
+msgid "Checks"
+msgstr "Checks"
+
+msgctxt "field:monitoring.check.plan,create_date:"
+msgid "Create Date"
+msgstr "Fecha creación"
+
+msgctxt "field:monitoring.check.plan,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:monitoring.check.plan,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:monitoring.check.plan,indicators:"
+msgid "State Indicators"
+msgstr "State Indicators"
+
+msgctxt "field:monitoring.check.plan,monitored_asset:"
+msgid "Monitored Asset"
+msgstr "Monitored Asset"
+
+msgctxt "field:monitoring.check.plan,monitoring_asset:"
+msgid "Monitoring Asset"
+msgstr "Monitoring Asset"
+
+msgctxt "field:monitoring.check.plan,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:monitoring.check.plan,scheduler:"
+msgid "Scheduler"
+msgstr "Acciones planificadas"
+
+msgctxt "field:monitoring.check.plan,type:"
+msgid "Type"
+msgstr "Tipo"
+
+msgctxt "field:monitoring.check.plan,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:monitoring.check.plan,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:monitoring.check.type,create_date:"
+msgid "Create Date"
+msgstr "Fecha creación"
+
+msgctxt "field:monitoring.check.type,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:monitoring.check.type,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:monitoring.check.type,internal_name:"
+msgid "Internal Name"
+msgstr "Nombre interno"
+
+msgctxt "field:monitoring.check.type,name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:monitoring.check.type,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:monitoring.check.type,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:monitoring.check.type,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:monitoring.result.char,check:"
+msgid "Check"
+msgstr "Check"
+
+msgctxt "field:monitoring.result.char,create_date:"
+msgid "Create Date"
+msgstr "Fecha creación"
+
+msgctxt "field:monitoring.result.char,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:monitoring.result.char,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:monitoring.result.char,label:"
+msgid "Label"
+msgstr "Etiqueta"
+
+msgctxt "field:monitoring.result.char,payload:"
+msgid "Payload"
+msgstr "Payload"
+
+msgctxt "field:monitoring.result.char,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:monitoring.result.char,type:"
+msgid "Type"
+msgstr "Tipo"
+
+msgctxt "field:monitoring.result.char,value:"
+msgid "Value"
+msgstr "Valor"
+
+msgctxt "field:monitoring.result.char,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:monitoring.result.char,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:monitoring.result.float,check:"
+msgid "Check"
+msgstr "Check"
+
+msgctxt "field:monitoring.result.float,create_date:"
+msgid "Create Date"
+msgstr "Fecha creación"
+
+msgctxt "field:monitoring.result.float,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:monitoring.result.float,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:monitoring.result.float,label:"
+msgid "Label"
+msgstr "Etiqueta"
+
+msgctxt "field:monitoring.result.float,payload:"
+msgid "Payload"
+msgstr "Payload"
+
+msgctxt "field:monitoring.result.float,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:monitoring.result.float,type:"
+msgid "Type"
+msgstr "Tipo"
+
+msgctxt "field:monitoring.result.float,uom:"
+msgid "UoM"
+msgstr "UdM"
+
+msgctxt "field:monitoring.result.float,value:"
+msgid "Value"
+msgstr "Valor"
+
+msgctxt "field:monitoring.result.float,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:monitoring.result.float,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:monitoring.result.integer,check:"
+msgid "Check"
+msgstr "Check"
+
+msgctxt "field:monitoring.result.integer,create_date:"
+msgid "Create Date"
+msgstr "Fecha creación"
+
+msgctxt "field:monitoring.result.integer,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:monitoring.result.integer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:monitoring.result.integer,label:"
+msgid "Label"
+msgstr "Etiqueta"
+
+msgctxt "field:monitoring.result.integer,payload:"
+msgid "Payload"
+msgstr "Payload"
+
+msgctxt "field:monitoring.result.integer,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:monitoring.result.integer,type:"
+msgid "Type"
+msgstr "Tipo"
+
+msgctxt "field:monitoring.result.integer,value:"
+msgid "Value"
+msgstr "Valor"
+
+msgctxt "field:monitoring.result.integer,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:monitoring.result.integer,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:monitoring.result.type,create_date:"
+msgid "Create Date"
+msgstr "Fecha creación"
+
+msgctxt "field:monitoring.result.type,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:monitoring.result.type,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:monitoring.result.type,internal_name:"
+msgid "Internal Name"
+msgstr "Nombre interno"
+
+msgctxt "field:monitoring.result.type,name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:monitoring.result.type,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:monitoring.result.type,type:"
+msgid "Type"
+msgstr "Tipo"
+
+msgctxt "field:monitoring.result.type,uom:"
+msgid "UoM"
+msgstr "UdM"
+
+msgctxt "field:monitoring.result.type,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:monitoring.result.type,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:monitoring.scheduler,create_date:"
+msgid "Create Date"
+msgstr "Fecha creación"
+
+msgctxt "field:monitoring.scheduler,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:monitoring.scheduler,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:monitoring.scheduler,name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:monitoring.scheduler,normal_check:"
+msgid "Normal Check Interval"
+msgstr ""
+
+msgctxt "field:monitoring.scheduler,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:monitoring.scheduler,retries:"
+msgid "Retries"
+msgstr "Intentos"
+
+msgctxt "field:monitoring.scheduler,retry_check:"
+msgid "Retry Check Interval"
+msgstr "Retry Check Interval"
+
+msgctxt "field:monitoring.scheduler,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:monitoring.scheduler,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:monitoring.state,check:"
+msgid "Check"
+msgstr "Check"
+
+msgctxt "field:monitoring.state,create_date:"
+msgid "Create Date"
+msgstr "Fecha creación"
+
+msgctxt "field:monitoring.state,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:monitoring.state,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:monitoring.state,indicator:"
+msgid "Indicator"
+msgstr "Indicator"
+
+msgctxt "field:monitoring.state,label:"
+msgid "Label"
+msgstr "Etiqueta"
+
+msgctxt "field:monitoring.state,monitored_asset:"
+msgid "Monitored Asset"
+msgstr "Monitored Asset"
+
+msgctxt "field:monitoring.state,monitoring_asset:"
+msgid "Monitoring Asset"
+msgstr "Monitoring Asset"
+
+msgctxt "field:monitoring.state,payload:"
+msgid "Payload"
+msgstr "Payload"
+
+msgctxt "field:monitoring.state,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:monitoring.state,state:"
+msgid "State"
+msgstr "Estado"
+
+msgctxt "field:monitoring.state,value:"
+msgid "Value"
+msgstr "Valor"
+
+msgctxt "field:monitoring.state,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:monitoring.state,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:monitoring.state.indicator,create_date:"
+msgid "Create Date"
+msgstr "Fecha creación"
+
+msgctxt "field:monitoring.state.indicator,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:monitoring.state.indicator,default_state_type:"
+msgid "Default Type"
+msgstr ""
+
+msgctxt "field:monitoring.state.indicator,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:monitoring.state.indicator,lines:"
+msgid "Lines"
+msgstr "Líneas"
+
+msgctxt "field:monitoring.state.indicator,name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:monitoring.state.indicator,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:monitoring.state.indicator,result_type:"
+msgid "Result Type"
+msgstr "Result Type"
+
+msgctxt "field:monitoring.state.indicator,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:monitoring.state.indicator,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:monitoring.state.indicator-monitoring.check.plan,create_date:"
+msgid "Create Date"
+msgstr "Fecha creación"
+
+msgctxt "field:monitoring.state.indicator-monitoring.check.plan,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:monitoring.state.indicator-monitoring.check.plan,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:monitoring.state.indicator-monitoring.check.plan,indicator:"
+msgid "Indicator"
+msgstr ""
+
+msgctxt "field:monitoring.state.indicator-monitoring.check.plan,last_check:"
+msgid "Last Check"
+msgstr "Last Check"
+
+msgctxt "field:monitoring.state.indicator-monitoring.check.plan,last_state:"
+msgid "State"
+msgstr "Estado"
+
+msgctxt ""
+"field:monitoring.state.indicator-monitoring.check.plan,last_state_type:"
+msgid "State Type"
+msgstr "State Type"
+
+msgctxt ""
+"field:monitoring.state.indicator-monitoring.check.plan,last_state_value:"
+msgid "Value"
+msgstr "Valor"
+
+msgctxt ""
+"field:monitoring.state.indicator-monitoring.check.plan,monitored_asset:"
+msgid "Monitored Asset"
+msgstr "Monitoring Asset"
+
+msgctxt ""
+"field:monitoring.state.indicator-monitoring.check.plan,monitoring_asset:"
+msgid "Monitoring Asset"
+msgstr "Monitoring Asset"
+
+msgctxt "field:monitoring.state.indicator-monitoring.check.plan,plan:"
+msgid "Plan"
+msgstr "Planificación"
+
+msgctxt "field:monitoring.state.indicator-monitoring.check.plan,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:monitoring.state.indicator-monitoring.check.plan,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:monitoring.state.indicator-monitoring.check.plan,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:monitoring.state.indicator.line,create_date:"
+msgid "Create Date"
+msgstr "Fecha creación"
+
+msgctxt "field:monitoring.state.indicator.line,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:monitoring.state.indicator.line,expression:"
+msgid "Expression"
+msgstr "Expresión"
+
+msgctxt "field:monitoring.state.indicator.line,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:monitoring.state.indicator.line,indicator:"
+msgid "Indicator"
+msgstr "Indicator"
+
+msgctxt "field:monitoring.state.indicator.line,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:monitoring.state.indicator.line,sequence:"
+msgid "Sequence"
+msgstr "Secuencia"
+
+msgctxt "field:monitoring.state.indicator.line,state_type:"
+msgid "Type"
+msgstr "Tipo"
+
+msgctxt "field:monitoring.state.indicator.line,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:monitoring.state.indicator.line,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:monitoring.state.type,create_date:"
+msgid "Create Date"
+msgstr "Fecha creación"
+
+msgctxt "field:monitoring.state.type,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:monitoring.state.type,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:monitoring.state.type,name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:monitoring.state.type,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:monitoring.state.type,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:monitoring.state.type,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:monitoring.state.type-party.party,create_date:"
+msgid "Create Date"
+msgstr "Fecha creación"
+
+msgctxt "field:monitoring.state.type-party.party,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:monitoring.state.type-party.party,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:monitoring.state.type-party.party,party:"
+msgid "Party"
+msgstr "Tercero"
+
+msgctxt "field:monitoring.state.type-party.party,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:monitoring.state.type-party.party,type:"
+msgid "Type"
+msgstr "Tipo"
+
+msgctxt "field:monitoring.state.type-party.party,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:monitoring.state.type-party.party,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:party.party,notification_assets:"
+msgid "Notification Assets"
+msgstr "Notification Assets"
+
+msgctxt "field:party.party,notification_types:"
+msgid "Types"
+msgstr "Tipos"
+
+msgctxt "field:synchro.mapping,create_date:"
+msgid "Create Date"
+msgstr "Fecha creación"
+
+msgctxt "field:synchro.mapping,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:synchro.mapping,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:synchro.mapping,local_id:"
+msgid "Local ID"
+msgstr "Local ID"
+
+msgctxt "field:synchro.mapping,model:"
+msgid "Model Name"
+msgstr "Nombre modelo"
+
+msgctxt "field:synchro.mapping,peer:"
+msgid "Peer"
+msgstr "Peer"
+
+msgctxt "field:synchro.mapping,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:synchro.mapping,remote_id:"
+msgid "Remote ID"
+msgstr "Remote ID"
+
+msgctxt "field:synchro.mapping,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:synchro.mapping,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "model:asset-party.party-notification,name:"
+msgid "Asset - Party Notification"
+msgstr "Asset - Party Notification"
+
+msgctxt "model:ir.action,name:act_asset_checks"
+msgid "Checks"
+msgstr "Checks"
+
+msgctxt "model:ir.action,name:act_asset_states"
+msgid "States"
+msgstr "Estados"
+
+msgctxt "model:ir.action,name:act_monitoring_check"
+msgid "Monitoring Check"
+msgstr "Monitoring Check"
+
+msgctxt "model:ir.action,name:act_monitoring_check_plan"
+msgid "Monitoring Check Plan"
+msgstr "Monitoring Check Plan"
+
+msgctxt "model:ir.action,name:act_monitoring_check_type"
+msgid "Monitoring Check Type"
+msgstr "Monitoring Check Type"
+
+msgctxt "model:ir.action,name:act_monitoring_result_char"
+msgid "Monitoring Result Char"
+msgstr "Monitoring Result Char"
+
+msgctxt "model:ir.action,name:act_monitoring_result_float"
+msgid "Monitoring Result Float"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_monitoring_result_integer"
+msgid "Monitoring Result Integer"
+msgstr "Monitoring Result Integer"
+
+msgctxt "model:ir.action,name:act_monitoring_result_type"
+msgid "Monitoring Result Type"
+msgstr "Monitoring Result Type"
+
+msgctxt "model:ir.action,name:act_monitoring_scheduler"
+msgid "Monitoring Scheduler"
+msgstr "Monitoring Scheduler"
+
+msgctxt "model:ir.action,name:act_monitoring_state"
+msgid "Monitoring State"
+msgstr "Monitoring State"
+
+msgctxt "model:ir.action,name:act_monitoring_state_indicator"
+msgid "Monitoring State Indicator"
+msgstr "Monitoring State Indicator"
+
+msgctxt "model:ir.action,name:act_monitoring_state_indicator_check_plan"
+msgid "Monitoring Curent States"
+msgstr "Monitoring Curent States"
+
+msgctxt "model:ir.action,name:act_monitoring_state_indicator_line"
+msgid "Monitoring Alert"
+msgstr "Monitoring Alert"
+
+msgctxt "model:ir.action,name:act_monitoring_state_type"
+msgid "Monitoring State Type"
+msgstr "Monitoring State Type"
+
+msgctxt "model:ir.action,name:act_plan_checks"
+msgid "Checks"
+msgstr "Checks"
+
+msgctxt "model:ir.cron,name:cron_scheduler"
+msgid "Monitoring Check"
+msgstr "Monitoring Check"
+
+msgctxt "model:ir.cron,name:cron_slave"
+msgid "Monitoring Slave"
+msgstr "Monitoring Slave"
+
+msgctxt "model:ir.ui.menu,name:menu_monitoring"
+msgid "Monitoring"
+msgstr "Monitoring"
+
+msgctxt "model:ir.ui.menu,name:menu_monitoring_check"
+msgid "Checks"
+msgstr "Checks"
+
+msgctxt "model:ir.ui.menu,name:menu_monitoring_check_plan"
+msgid "Check Plans"
+msgstr "Check Plans"
+
+msgctxt "model:ir.ui.menu,name:menu_monitoring_check_type"
+msgid "Check Types"
+msgstr "Check Types"
+
+msgctxt "model:ir.ui.menu,name:menu_monitoring_result_char"
+msgid "Char Results"
+msgstr "Char Results"
+
+msgctxt "model:ir.ui.menu,name:menu_monitoring_result_float"
+msgid "Float Results"
+msgstr "Float Results"
+
+msgctxt "model:ir.ui.menu,name:menu_monitoring_result_integer"
+msgid "Integer Results"
+msgstr "Integer Results"
+
+msgctxt "model:ir.ui.menu,name:menu_monitoring_result_type"
+msgid "Result Types"
+msgstr "Result Types"
+
+msgctxt "model:ir.ui.menu,name:menu_monitoring_scheduler"
+msgid "Monitoring Scheduler"
+msgstr "Monitoring Scheduler"
+
+msgctxt "model:ir.ui.menu,name:menu_monitoring_state_indicator"
+msgid "State Indicators"
+msgstr "State Indicators"
+
+msgctxt "model:ir.ui.menu,name:menu_monitoring_state_type"
+msgid "State Types"
+msgstr "State Types"
+
+msgctxt "model:ir.ui.menu,name:menu_state_indicator_check_plan"
+msgid "Current States"
+msgstr "Current States"
+
+msgctxt "model:monitoring.check,name:"
+msgid "Monitoring Check"
+msgstr "Monitoring Check"
+
+msgctxt "model:monitoring.check.plan,name:"
+msgid "Monitoring Check Plan"
+msgstr "Monitoring Check Plan"
+
+msgctxt "model:monitoring.check.type,name:"
+msgid "Monitoring Check Type"
+msgstr "Monitoring Check Type"
+
+msgctxt "model:monitoring.result.char,name:"
+msgid "Monitoring Result Char"
+msgstr "Monitoring Result Char"
+
+msgctxt "model:monitoring.result.float,name:"
+msgid "Monitoring Result Float"
+msgstr "Monitoring Result Float"
+
+msgctxt "model:monitoring.result.integer,name:"
+msgid "Monitoring Result Integer"
+msgstr "Monitoring Result Integer"
+
+msgctxt "model:monitoring.result.type,name:"
+msgid "Monitoring Result Type"
+msgstr "Monitoring Result Type"
+
+msgctxt "model:monitoring.scheduler,name:"
+msgid "Monitoring Scheduler"
+msgstr "Monitoring Scheduler"
+
+msgctxt "model:monitoring.state,name:"
+msgid "Monitoring State"
+msgstr "Monitoring State"
+
+msgctxt "model:monitoring.state.indicator,name:"
+msgid "Monitoring State Indicator"
+msgstr "Monitoring State Indicator"
+
+msgctxt "model:monitoring.state.indicator-monitoring.check.plan,name:"
+msgid "Monitoring State Indicator - Monitoring Check Plan"
+msgstr "Monitoring State Indicator - Monitoring Check Plan"
+
+msgctxt "model:monitoring.state.indicator.line,name:"
+msgid "Monitoring State Indicator Line"
+msgstr "Monitoring State Indicator Lin"
+
+msgctxt "model:monitoring.state.type,name:"
+msgid "Monitoring State Value"
+msgstr "Monitoring State Value"
+
+msgctxt "model:monitoring.state.type,name:state_type_error"
+msgid "Error"
+msgstr "Error"
+
+msgctxt "model:monitoring.state.type,name:state_type_exception"
+msgid "Exception"
+msgstr "Excepción"
+
+msgctxt "model:monitoring.state.type,name:state_type_ok"
+msgid "Ok"
+msgstr "Aceptar"
+
+msgctxt "model:monitoring.state.type,name:state_type_warning"
+msgid "Warning"
+msgstr "Aviso"
+
+msgctxt "model:monitoring.state.type-party.party,name:"
+msgid "Monitoring State - Party"
+msgstr "Monitoring State - Party"
+
+msgctxt "model:product.uom,name:uom_byte"
+msgid "Byte"
+msgstr "Byte"
+
+msgctxt "model:product.uom,name:uom_gigabyte"
+msgid "Gigabyte"
+msgstr "Gigabyte"
+
+msgctxt "model:product.uom,name:uom_kibibyte"
+msgid "Kibibyte"
+msgstr "Kibibyte"
+
+msgctxt "model:product.uom,name:uom_kilobyte"
+msgid "Kilobyte"
+msgstr "Kilobyte"
+
+msgctxt "model:product.uom,name:uom_mebibyte"
+msgid "Mebibyte"
+msgstr "Mebibyte"
+
+msgctxt "model:product.uom,name:uom_megabyte"
+msgid "Megabite"
+msgstr "Megabite"
+
+msgctxt "model:product.uom,name:uom_millisecond"
+msgid "Millisecond"
+msgstr "Millisecond"
+
+msgctxt "model:product.uom,name:uom_percent"
+msgid "Percent"
+msgstr "Percent"
+
+msgctxt "model:product.uom,name:uom_permille"
+msgid "Per Mille"
+msgstr "Per Mille"
+
+msgctxt "model:product.uom,name:uom_rate"
+msgid "Rate"
+msgstr "Tasa de cambio"
+
+msgctxt "model:product.uom,name:uom_terabyte"
+msgid "Terabyte"
+msgstr "Terabyte"
+
+msgctxt "model:product.uom,symbol:uom_byte"
+msgid "B"
+msgstr "B"
+
+msgctxt "model:product.uom,symbol:uom_gigabyte"
+msgid "GB"
+msgstr "GB"
+
+msgctxt "model:product.uom,symbol:uom_kibibyte"
+msgid "KiB"
+msgstr "KiB"
+
+msgctxt "model:product.uom,symbol:uom_kilobyte"
+msgid "KB"
+msgstr "KB"
+
+msgctxt "model:product.uom,symbol:uom_mebibyte"
+msgid "MiB"
+msgstr ""
+
+msgctxt "model:product.uom,symbol:uom_megabyte"
+msgid "MB"
+msgstr ""
+
+msgctxt "model:product.uom,symbol:uom_millisecond"
+msgid "ms"
+msgstr "ms"
+
+msgctxt "model:product.uom,symbol:uom_percent"
+msgid "%"
+msgstr "%"
+
+msgctxt "model:product.uom,symbol:uom_permille"
+msgid "‰"
+msgstr ‰""
+
+msgctxt "model:product.uom,symbol:uom_rate"
+msgid " "
+msgstr " "
+
+msgctxt "model:product.uom,symbol:uom_terabyte"
+msgid "TB"
+msgstr TB""
+
+msgctxt "model:product.uom.category,name:uom_cat_data"
+msgid "Data"
+msgstr "Datos"
+
+msgctxt "model:product.uom.category,name:uom_cat_ratio"
+msgid "Ratio"
+msgstr "Porcentaje"
+
+msgctxt "model:res.group,name:group_monitoring"
+msgid "Monitoring"
+msgstr "Monitoring"
+
+msgctxt "model:res.group,name:group_monitoring_admin"
+msgid "Monitoring Administration"
+msgstr "Monitoring Administration"
+
+msgctxt "model:res.user,name:user_monitoring"
+msgid "Cron Monitoring"
+msgstr "Cron Monitoring"
+
+msgctxt "model:synchro.mapping,name:"
+msgid "Synchronization Mapping"
+msgstr "Synchronization Mapping"
+
+msgctxt "selection:monitoring.result.type,type:"
+msgid "Char"
+msgstr "Texto"
+
+msgctxt "selection:monitoring.result.type,type:"
+msgid "Float"
+msgstr "Número coma flotante"
+
+msgctxt "selection:monitoring.result.type,type:"
+msgid "Integer"
+msgstr "Entero"
+
+msgctxt "view:asset:"
+msgid "Monitoring"
+msgstr "Monitoring"
+
+msgctxt "view:monitoring.check.plan:"
+msgid "Check Now"
+msgstr "Check Now"
+
+msgctxt "view:monitoring.check.plan:"
+msgid "Monitoring Check Plan"
+msgstr "Monitoring Check Plan"
+
+msgctxt "view:monitoring.check.type:"
+msgid "Monitoring Check Type"
+msgstr "Monitoring Check Type"
+
+msgctxt "view:monitoring.check:"
+msgid "Monitoring Check"
+msgstr "Monitoring Check"
+
+msgctxt "view:monitoring.result.char:"
+msgid "Monitoring Result Char"
+msgstr "Monitoring Result Char"
+
+msgctxt "view:monitoring.result.float:"
+msgid "Monitoring Result Float"
+msgstr "Monitoring Result Float"
+
+msgctxt "view:monitoring.result.integer:"
+msgid "Monitoring Result Integer"
+msgstr "Monitoring Result Integer"
+
+msgctxt "view:monitoring.result.type:"
+msgid "Monitoring Result Type"
+msgstr "Monitoring Result Type"
+
+msgctxt "view:monitoring.scheduler:"
+msgid "Monitoring Scheduler"
+msgstr "Monitoring Scheduler"
+
+msgctxt "view:monitoring.state.indicator-monitoring.check.plan:"
+msgid "Current State"
+msgstr "Current State"
+
+msgctxt "view:monitoring.state.indicator.line:"
+msgid "Monitoring State Indicator Line"
+msgstr "Monitoring State Indicator Line"
+
+msgctxt "view:monitoring.state.indicator:"
+msgid "Monitoring State Indicator"
+msgstr "Monitoring State Indicator"
+
+msgctxt "view:monitoring.state.type:"
+msgid "Monitoring State Type"
+msgstr "Monitoring State Type"
+
+msgctxt "view:monitoring.state:"
+msgid "Monitoring State"
+msgstr "Monitoring State"
+
+msgctxt "view:party.party:"
+msgid "Monitoring"
+msgstr "Monitoring"
