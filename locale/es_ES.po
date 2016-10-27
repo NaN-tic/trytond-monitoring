@@ -16,7 +16,7 @@ msgstr "Nombre usuario"
 
 msgctxt "field:asset,notification_parties:"
 msgid "Notification Parties"
-msgstr Notification Parties""
+msgstr "Notification Parties"
 
 msgctxt "field:asset,password:"
 msgid "Password"
@@ -640,7 +640,7 @@ msgstr "Fecha creación"
 
 msgctxt "field:monitoring.state.type,create_uid:"
 msgid "Create User"
-msgstr "Usuario creación"
+msgstr "Usuario creación"/home/resteve/virtualenv/nan40nan/trytond/trytond/modules/monitoring/locale/es_ES.po
 
 msgctxt "field:monitoring.state.type,id:"
 msgid "ID"
@@ -916,7 +916,7 @@ msgstr "Monitoring State Indicator Lin"
 
 msgctxt "model:monitoring.state.type,name:"
 msgid "Monitoring State Value"
-msgstr "Monitoring State Value"
+msgstr "Monitoring State Value"/home/resteve/virtualenv/nan40nan/trytond/trytond/modules/monitoring/locale/es_ES.po
 
 msgctxt "model:monitoring.state.type,name:state_type_error"
 msgid "Error"
