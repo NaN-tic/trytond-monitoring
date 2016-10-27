@@ -1016,7 +1016,7 @@ msgstr "%"
 
 msgctxt "model:product.uom,symbol:uom_permille"
 msgid "‰"
-msgstr ‰""
+msgstr "‰"
 
 msgctxt "model:product.uom,symbol:uom_rate"
 msgid " "
@@ -1024,7 +1024,7 @@ msgstr " "
 
 msgctxt "model:product.uom,symbol:uom_terabyte"
 msgid "TB"
-msgstr TB""
+msgstr "TB"
 
 msgctxt "model:product.uom.category,name:uom_cat_data"
 msgid "Data"
