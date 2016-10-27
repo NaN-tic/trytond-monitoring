@@ -640,7 +640,7 @@ msgstr "Fecha creación"
 
 msgctxt "field:monitoring.state.type,create_uid:"
 msgid "Create User"
-msgstr "Usuario creación"/home/resteve/virtualenv/nan40nan/trytond/trytond/modules/monitoring/locale/es_ES.po
+msgstr "Usuario creación"
 
 msgctxt "field:monitoring.state.type,id:"
 msgid "ID"
@@ -916,7 +916,7 @@ msgstr "Monitoring State Indicator Lin"
 
 msgctxt "model:monitoring.state.type,name:"
 msgid "Monitoring State Value"
-msgstr "Monitoring State Value"/home/resteve/virtualenv/nan40nan/trytond/trytond/modules/monitoring/locale/es_ES.po
+msgstr "Monitoring State Value"
 
 msgctxt "model:monitoring.state.type,name:state_type_error"
 msgid "Error"
